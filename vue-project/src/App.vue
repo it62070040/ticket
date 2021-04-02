@@ -1,12 +1,16 @@
+import store from './vuex/store'
 <template>
   <div id="app">
     <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
-
 <script>
 export default {
+  components:{
+
+  },
+  store,
   name: 'App'
 }
 </script>
