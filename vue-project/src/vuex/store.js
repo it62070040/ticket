@@ -8,6 +8,9 @@ Vue.use(Vuex)
 // the app starts up
 const state = {
   // TODO: Set up our initial state
+  col1: false,
+  col2: false,
+  col3: false,
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -19,5 +22,5 @@ const mutations = {
 // This store can be linked to our app.
 export default new Vuex.Store({
   state,
-  mutations
+  mutations,
 })
