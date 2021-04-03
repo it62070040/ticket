@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <section id="app">
             <!-- slide img -->
             <div class="box mx-auto" style="width: 700px; height: 400px; margin: 0px 0px 0px 0px;">
                 <div id="carouselExample1" class="carousel slide z-depth-1-half" data-ride="carousel">
@@ -70,52 +71,20 @@
     </div>
             <div class="concert">
                 <div class="row">
-                    <div class="col-3 pt-2  ">
+                    <div class="col-3 pt-2" v-for="item in concerts" v-bind:key="item.concert_id">
                         <div class="card" style="width: 18rem;">
                             <img class="card-img-top" src="" alt="Card image cap">
                             <div class="card-body">
-                                <h5 class="card-title">ชื่อคอนเสิรต</h5>
-                                <p class="card-text">(วันที่แสดง) 01 ม.ค. 2020</p>
-                                <p class="card-text">(สถานที่ทำการแสดง) อิมแพ็ค อารีน่า เมืองทองธานี</p>
-                                <div class="text-center"><a href="" class="btn btn-outline-danger">ซื้อตั๋ว</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3 pt-2 ml-0">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">ชื่อคอนเสิรต</h5>
-                                <p class="card-text">(วันที่แสดง) 01 ม.ค. 2020</p>
-                                <p class="card-text">(สถานที่ทำการแสดง) อิมแพ็ค อารีน่า เมืองทองธานี</p>
-                                <div class="text-center"><a href="" class="btn btn-outline-danger">ซื้อตั๋ว</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3 pt-2 ml-0">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">ชื่อคอนเสิรต</h5>
-                                <p class="card-text">(วันที่แสดง) 01 ม.ค. 2020</p>
-                                <p class="card-text">(สถานที่ทำการแสดง) อิมแพ็ค อารีน่า เมืองทองธานี</p>
-                                <div class="text-center"><a href="" class="btn btn-outline-danger">ซื้อตั๋ว</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3 pt-2 ml-0">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">ชื่อคอนเสิรต</h5>
-                                <p class="card-text">(วันที่แสดง) 01 ม.ค. 2020</p>
-                                <p class="card-text">(สถานที่ทำการแสดง) อิมแพ็ค อารีน่า เมืองทองธานี</p>
+                                <h5 class="card-title">{{item.concert_title}}</h5>
+                                <p class="card-text">{{item.concert_showtime}}</p>
+                                <p class="card-text">{{item.concert_address}}</p>
                                 <div class="text-center"><a href="" class="btn btn-outline-danger">ซื้อตั๋ว</a></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+          </section>
        </div>
 </template>
 
@@ -125,8 +94,8 @@ export default {
     created() {
     axios.get("http://localhost:3000/")
         .then((response) => {
-          this.blogs = response.data;
-          console.log(this.blogs)
+          this.concerts = response.data;
+          console.log(this.concerts)
         })
         .catch((err) => {
           console.log(err);
@@ -134,7 +103,7 @@ export default {
 },
     data() {
       return {
-          blogs: null
+          concerts: null
       }
     }
   }
