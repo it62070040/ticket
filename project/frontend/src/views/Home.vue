@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-3 pt-2" v-for="item in concerts" v-bind:key="item.concert_id">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="" alt="Card image cap">
+                            <img class="card-img-top" :src="'http://localhost:3000/' + item.concert_image">
                             <div class="card-body">
                                 <h5 class="card-title">{{item.concert_title}}</h5>
                                 <p class="card-text">{{item.concert_showtime}}</p>
@@ -95,6 +95,7 @@ export default {
     axios.get("http://localhost:3000/")
         .then((response) => {
           this.concerts = response.data;
+          this.conimg = response.data;
           console.log(this.concerts)
         })
         .catch((err) => {
@@ -103,6 +104,7 @@ export default {
 },
     data() {
       return {
+          conimg: null,
           concerts: null
       }
     }

@@ -75,8 +75,10 @@ PRIMARY KEY (`ticket_id`),
 UNIQUE KEY `ticket_id` (`ticket_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
+
 INSERT INTO `concert` (`concert_id`, `concert_title`, `concert_amountseat`, `concert_address`, `concert_desc`, `concert_status`, `concert_showtime`, `concert_image`, `buy_available`, `user_user_id`) VALUES
-('1', 'Three man down', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2021-03-09 05:14:41', 'img.png', '2021-03-09 05:14:41', default);
+('1', 'Three man down', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2021-03-09 05:14:41', 'uploads/1.jpg', '2021-03-09 05:14:41', default),
+('2', 'Bodyslam', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2021-03-09 05:14:41', 'uploads/2.jpg', '2021-03-09 05:14:41', default);
 
 INSERT INTO `concert_price` (`id`, `price_zone`, `price_seat`, `concert_concert_id`) VALUES
 ('1', 'A', 2000, default);
