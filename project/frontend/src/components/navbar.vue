@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="navbar-brand" href="#">
-                        <img src="/images/boot.png" width="30" height="30" alt="">
+                        <img src="../assets/boot.png" width="30" height="30" alt="">
                     </a>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">

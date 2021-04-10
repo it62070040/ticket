@@ -18,8 +18,8 @@ create table `concert` (
 `concert_amountseat` int(5) not null,
 `concert_address` text not null,
 `concert_desc` text not null,
-`concert_status` enum('cancel', 'coming soon', 'on sale now') not null,
-`concert_showtime` timestamp not null,
+`concert_status` enum('canceled', 'coming soon', 'on sale now') not null,
+`concert_showtime` date not null,
 `concert_image` varchar(200) not null,
 `buy_available` timestamp not null,
 `user_user_id` int(20) unsigned,
@@ -77,8 +77,12 @@ UNIQUE KEY `ticket_id` (`ticket_id`)
 
 
 INSERT INTO `concert` (`concert_id`, `concert_title`, `concert_amountseat`, `concert_address`, `concert_desc`, `concert_status`, `concert_showtime`, `concert_image`, `buy_available`, `user_user_id`) VALUES
-('1', 'Three man down', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2021-03-09 05:14:41', 'uploads/1.jpg', '2021-03-09 05:14:41', default),
-('2', 'Bodyslam', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2021-03-09 05:14:41', 'uploads/2.jpg', '2021-03-09 05:14:41', default);
+('1', 'Three man down', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2010-03-09', 'uploads/1.jpg', '2021-03-09 05:14:41', default),
+('2', 'Bodyslam', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2021-03-09', 'uploads/2.jpg', '2021-03-09 05:14:41', default),
+('3', 'Dept', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'canceled', '2021-11-01', 'uploads/2.jpg', '2019-04-09 05:14:41', default),
+('4', 'RRCB MBK (ROCK And ROLL Come Back MBK)', 6, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'canceled', '1991-03-11', 'uploads/cat2.jpeg', '2021-03-09 05:14:41', default),
+('5', '2022 FIFA World Cup Qualification (AFC)GROUP G Thailand vs. Indonesia', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'canceled', '1921-05-11', 'uploads/cat1.jpeg', '2021-03-09 05:14:41', default);
+
 
 INSERT INTO `concert_price` (`id`, `price_zone`, `price_seat`, `concert_concert_id`) VALUES
 ('1', 'A', 2000, default);
