@@ -1,19 +1,24 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="navbar-brand" href="#">
-                        <img src="../assets/boot.png" width="30" height="30" alt="">
+                        <img src="../assets/logo.png" width="30" height="auto" alt="">
                     </a>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
+                                <router-link to="/">
                                 <a class="nav-link" href="#">หน้าแรก</a>
+                                </router-link>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">คอนเสิร์ต</a>
                             </li>
 
                         </ul>
+                        <router-link to="/create">
+                        <button type="button" class="btn btn-danger">New Concert</button>
+                        </router-link>
                         <form class="form-inline my-lg-0 ">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item">

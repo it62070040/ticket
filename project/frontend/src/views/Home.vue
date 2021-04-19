@@ -59,6 +59,14 @@
       </div>
     </div>
 
+<div class="columns">
+          <div class="column is-half">
+            <input class="input" type="text" v-model="search" placeholder="Search blog(s)">
+          </div>
+          <div class="column is-half">
+            <button @click="getConcert" class="button">Search</button>
+          </div>
+        </div>
     <!-- show concert -->
     <div class="container">
       <div class="row mx-auto">
@@ -83,15 +91,17 @@
         </div>
       </div>
       <div class="row mx-auto">
-        <div class="col-4 col-md-3 col-lg-2 pb-4" v-for="item in concerts" v-bind:key="item.concert_id" >
-          <div class="card" style="position:relative; min-width: 150px; border-style: hidden;">
-            <img class="card-img-top"  :src="'http://localhost:3000/'+item.concert_image" alt="image cap">
+        <div class="col-4 col-md-3 col-lg-2 pb-4" v-for="concert in concerts" :key="concert.id" >
+          <div class="card" style="position:relative; border-style: hidden;">
+            <div id="card-img-top"  style="height: 150px; width: auto; background-position: center;">
+              <img  :src="imagePath(concert.file_path)" alt="image cap">
+            </div>
             <div class="card-body" style="min-height:200px; padding: 0.5rem;">
-                <p class="card-title pt-2" >{{ item.concert_title }}</p>
-                <p class="card-text" style="height:10px; font-weight: 500;" :value="date">{{ item.concert_showtime}}</p>
+                <p class="card-title pt-2" >{{ concert.concert_title }}</p>
+                <p class="card-text" style="height:10px; font-weight: 500;" :value="date">{{ concert.concert_showtime}}</p>
                 <!-- <p class="card-text" >{{findDate}}</p> -->
-                <p class="card-text" >
-                  {{ item.concert_address }}
+                <p class="card-text" style="height:20px; font-weight: 500;">
+                  {{ concert.concert_address }}
                 </p>
               <div class="text-center" >
                 <a href="#" class="btn btn-outline-danger">ซื้อบัตร</a>
@@ -179,28 +189,49 @@
 <script>
 import axios from "axios";
 export default {
-  created() {
-    axios
-      .get("http://localhost:3000/")
-      .then((response) => {
-        this.concerts = response.data;
-        // this.conimg = response.data;
-        // this.date = response.data[0].concerts_showtime;
-        console.log(response.data);
-        console.log(response.data[0].concert_showtime)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
   data() {
     return {
-      conimg: null,
-      concerts: null,
+      concerts: [],
+      search: '',
+      images: [],
       date: null,
+      error: null,
+
     };
   },
-  methods: {},
+  mounted () {
+    this.getConcert()
+  },
+  methods: {
+    getConcert() {
+      axios
+        .get("http://localhost:3000", {
+          params: {
+            search: this.search
+          }
+        })
+        .then((response) => {
+          this.concerts = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    imagePath(file_path) {
+      if (file_path){
+        return 'http://localhost:3000/' + file_path
+      } 
+      else {
+        return 'https://bulma.io/images/placeholders/640x360.png'
+      }
+    },
+    shortContent(content) {
+      if (content.length > 200) {
+        return content.substring(0, 197) + '...'
+      }
+      return content
+    },
+  }
 };
 </script>
 
@@ -216,11 +247,11 @@ export default {
   line-height: 13pt;
   overflow: hidden;
 }
-.card-img-top{
-  min-height: 200px;
-  width: auto; 
-  overflow: hidden;
-  text-align: center;
+#card-img-top img{
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto auto;
+  display: block;
 }
 .modal-dialog{
     overflow-y: initial !important
