@@ -158,20 +158,92 @@
                         <small id="" class="form-text text-muted text-center">กรุณากรอกข้อมูลให้ครบถ้วน</small>
                         <form>
                             <div class="form-group">
-                                <input type="text" class="form-control mt-5 " id="" placeholder="ชื่อ">
-                                <input type="text" class="form-control mt-3" id="" placeholder="นามสกุล">
-                                <input type="text" class="form-control mt-3" id="" placeholder="ชื่อบัญชีผู้ใช้">
-                                <input type="email" class="form-control mt-3" id="" aria-describedby="emailHelp"
-                                    placeholder="อีเมล">
-                                <input type="password" class="form-control mt-3" id="" placeholder="รหัสผ่าน">
-                                <input type="password" class="form-control mt-3" id="" placeholder="ยืนยันรหัสผ่าน">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="rd_1" name="rd" class="custom-control-input red" value="cus" v-model="role">
+                                  <label class="custom-control-label" for="rd_1">ผู้ซื้อ</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="rd_2" name="rd" class="custom-control-input red" value="sell" v-model="role">
+                                  <label class="custom-control-label" for="rd_2">ผู้ขาย</label>
+                                </div>
+                                <input type="text" class="form-control mt-5 " id="" placeholder="ชื่อ" v-model="$v.first_name.$model" :class="{'is-danger' : $v.first_name.$error}">
+                                <template v-if="$v.first_name.$error">
+                                  <div>
+                                    <p class="help is-danger" v-if="!$v.first_name.required">
+                                      This field is required
+                                    </p>
+                                    <p class="help is-danger" v-if="!$v.first_name.maxLength">
+                                      your name too long
+                                      </p>
+                                  </div>
+                                </template>
+                                <input type="text" class="form-control mt-3" id="" placeholder="นามสกุล" v-model="$v.last_name.$model" :class="{'is-danger' : $v.last_name.$error}">
+                                <template v-if="$v.last_name.$error">
+                                  <div>
+                                    <p class="help is-danger" v-if="!$v.last_name.required">
+                                      This field is required
+                                    </p>
+                                    <p class="help is-danger" v-if="!$v.last_name.maxLength">
+                                      your last name too long
+                                      </p>
+                                  </div>
+                                </template>
+                                <input type="email" class="form-control mt-3" id="" aria-describedby="emailHelp" placeholder="อีเมล" v-model="$v.email.$model" :class="{'is-danger' : $v.email.$error}">
+                                <template v-if="$v.email.$error">
+                                  <div>
+                                    <p class="help is-danger" v-if="!$v.email.required">
+                                      This field is required
+                                    </p>
+                                    <p class="help is-danger" v-if="!$v.email.email">
+                                      Invalid email
+                                      </p>
+                                  </div>
+                                </template>
+                                <input type="password" class="form-control mt-3" id="" placeholder="รหัสผ่าน" v-model="$v.password.$model" :class="{'is-danger' : $v.password.$error}">
+                                <template v-if="$v.password.$error">
+                                  <p class="help is-danger" v-if="!$v.password.required">
+                                    This field is required
+                                  </p>
+                                  <p class="help is-danger" v-if="!$v.password.minLength">
+                                    password too short
+                                  </p>
+                                  <p class="help is-danger" v-if="!$v.password.complex">
+                                    password too weak (you must have A-Z , a-z , 0-9)
+                                  </p>
+                                </template>
+                                <input type="password" class="form-control mt-3" id="" placeholder="ยืนยันรหัสผ่าน" v-model="$v.confirmpassword.$model" :class="{'is-danger' : $v.confirmpassword.$error}">
+                                <template v-if="$v.confirmpassword.$error">
+                                  <p class="help is-danger" v-if="!$v.confirmpassword.required">
+                                    This field is required
+                                  </p>
+                                  <p class="help is-danger" v-if="!$v.confirmpassword.sameAs">
+                                    password doesn't match
+                                  </p>
+                                </template>
                                 <label for="" class="mt-3">ที่อยู่</label>
-                                <textarea class="form-control " id="" rows="2"></textarea>
-                                <input type="text" class="form-control mt-3" id="" placeholder="เบอร์โทรศัพท์">
+                                <textarea class="form-control " id="" rows="2" v-model="$v.address.$model" :class="{'is-danger' : $v.address.$error}"></textarea>
+                                <template v-if="$v.address.$error">
+                                  <div>
+                                    <p class="help is-danger" v-if="!$v.address.required">
+                                    This field is required
+                                  </p>
+                                  </div>
+                                </template>
+                                <input type="text" class="form-control mt-3" id="" placeholder="เบอร์โทรศัพท์" v-model="$v.mobile.$model" :class="{'is-danger' : $v.mobile.$error}">
+                                <template v-if="$v.mobile.$error">
+                                  <div>
+                                    <p class="help is-danger" v-if="!$v.mobile.required">
+                                    This field is required
+                                    </p>
+                                    <p class="help is-danger" v-if="!$v.mobile.mobile">
+                                    Invalid mobile number
+                                    </p>
+                                  </div>
+                                </template>
                             </div>
                             
                             <button type="submit" class="btn btn-danger mx-auto"
-                                style="display: block;">สมัครสมาชิก</button>
+                                style="display: block;" @click="submit()">สมัครสมาชิก</button>
                            <hr class="my-0">     
                         </form>
                         <div class="text-center mt-3">
@@ -188,6 +260,16 @@
 
 <script>
 import axios from "axios";
+import {required, email, minLength, sameAs, maxLength} from "vuelidate/lib/validators";
+function complexPassword(value) {
+  if (!(value.match(/[a-z]/) && value.match(/[A-Z]/) && value.match(/[0-9]/))) {
+    return false;
+  }
+  return true;
+}
+function mobile(value) {
+  return !!value.match(/0[0-9]{9}/);
+}
 export default {
   data() {
     return {
@@ -196,13 +278,46 @@ export default {
       images: [],
       date: null,
       error: null,
-
+      password: "",
+      confirmpassword: "",
+      email: "",
+      mobile: "",
+      first_name: "",
+      last_name: "",
+      address: "",
+      role: "",
     };
   },
   mounted () {
     this.getConcert()
   },
   methods: {
+    submit(){
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        let data = {
+          address: this.address,
+          password: this.password,
+          confirmpassword: this.confirmpassword,
+          email: this.email,
+          mobile: this.mobile,
+          first_name: this.first_name,
+          last_name: this.last_name,
+          role: this.role
+        };
+        console.log(data)
+        alert(data)
+        axios
+          .post("http://localhost:3000/signup", data)
+          .then((response) => {
+            console.log(response)
+            alert("Sign up Success");
+          })
+          .catch((err) => {
+            alert(err.response.data.details.message);
+          });
+      }
+    },
     getConcert() {
       axios
         .get("http://localhost:3000", {
@@ -231,7 +346,37 @@ export default {
       }
       return content
     },
-  }
+  },
+  validations: {
+    email: {
+      required: required,
+      email: email,
+    },
+    password: {
+      required: required,
+      minLength: minLength(8),
+      complex: complexPassword,
+    },
+    confirmpassword: {
+      required: required,
+      sameAs: sameAs("password"),
+    },
+    mobile: {
+      required,
+      mobile: mobile,
+    },
+    address: {
+      required: required,
+    },
+    first_name: {
+      required: required,
+      maxLength: maxLength(150),
+    },
+    last_name: {
+      required: required,
+      maxLength: maxLength(150),
+    },
+  },
 };
 </script>
 
