@@ -25,6 +25,39 @@
     <div class="p-5" v-show="store.state.col2">
       <h3>ประวัติการสั่งซื้อ</h3>
       <span style="font-weith: bold">งานแสดง</span>
+      <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>รหัสการสั่งซื้อ</th>
+        <th>ชื่อคอนเสิร์ต</th>
+        <th>วันที่แสดง</th>
+        <th>รอบการแสดง</th>
+        <th>โซน</th>
+        <th>ที่นั่ง</th>
+        <th>จำนวน</th>
+        <th>ราคาตั๋ว(บาท)</th>
+        <th>รวม (บาท)</th>
+        <th>สถานะ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John</td>
+        <td>Doe</td>
+        <td>john@example.com</td>
+      </tr>
+      <tr>
+        <td>Mary</td>
+        <td>Moe</td>
+        <td>mary@example.com</td>
+      </tr>
+      <tr>
+        <td>July</td>
+        <td>Dooley</td>
+        <td>july@example.com</td>
+      </tr>
+    </tbody>
+  </table>
     </div>
 
     <div class="p-5" v-show="store.state.col3">
@@ -38,14 +71,6 @@
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">นามสกุล</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" />
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="staticEmail" class="col-sm-2 col-form-label"
-            >ชื่อผู้ใช้</label
-          >
           <div class="col-sm-10">
             <input type="text" class="form-control" />
           </div>
