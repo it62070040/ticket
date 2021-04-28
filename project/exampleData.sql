@@ -109,7 +109,7 @@ INSERT INTO `booking` (`booking_id`, `booking_seat`, `booking_concert`, `booking
 ('1', 'A1', 'Three man down', '1', '2021-03-09 05:14:41', true, 2000, 'abc', default, default, default);
 
 INSERT INTO `images` (`id`, `concert_id`, `file_path`, `upload_date`, `update_by_id`, `main`) VALUES
-('1', '1', '\uploads\myImage-1618695697812.jpg', '2021-03-16 21:03:36', NULL, '1'),
-('2', '2', '../project/backend/static/uploads/2.jpg', '2021-03-16 21:04:27', NULL, '1'),
-('3', '3', '../project/backend/static/uploads/3.jpg', '2021-03-16 21:51:56', NULL, '1'),
-('4', '4', '../project/backend/static/uploads/cat1.png', '2021-03-16 21:51:56', NULL, '1');
+('1', '1', 'uploads/1.jpg', '2021-03-16 21:03:36', NULL, '1'),
+('2', '2', 'uploads/2.jpg', '2021-03-16 21:04:27', NULL, '1'),
+('3', '3', 'uploads/3.jpg', '2021-03-16 21:51:56', NULL, '1'),
+('4', '4', 'uploads/myImage-1618695697812.jpg', '2021-03-16 21:51:56', NULL, '1');

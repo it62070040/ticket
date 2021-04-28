@@ -2,7 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import user from '@/views/user'
-import seat from '@/views/seat'
+// import seatunion from '@/views/seatunion' 
+// import { component } from 'vue/types/umd' 
+import seathotel from '@/views/seathotel' 
+import hotel_K from '@/views/hotel_K' 
+import choosepayment from '@/views/choosepayment' 
+import payment from '@/views/payment' 
 
 
 Vue.use(VueRouter)
@@ -18,16 +23,36 @@ const routes = [
     name: 'user',
     component: user,
   },
-  {
-    path: '/seat',
-    name: 'seat',
-    component: seat,
-  },
+   // { 
+  //   path: '/seatunion', 
+  //   name: 'seatunion', 
+  //   component: seatunion, 
+  // }, 
   {
     path: '/create',
     name: 'createConcert',
     component: () => import('../views/createConcert.vue')
   },
+  { 
+    path: '/seathotel', 
+    name: 'seathotel', 
+    component: seathotel, 
+  }, 
+  { 
+    path: '/hotel_K', 
+    name: 'hotel_K', 
+    component: hotel_K, 
+  }, 
+  { 
+    path: '/choosepayment', 
+    name: 'choosepayment', 
+    component: choosepayment, 
+  }, 
+  { 
+    path: '/payment', 
+    name: 'payment', 
+    component: payment, 
+  } 
 ]
 
 const router = new VueRouter({
