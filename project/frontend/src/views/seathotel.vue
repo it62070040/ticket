@@ -4,26 +4,34 @@
       <div class="col-12"> 
         <div class="row"> 
           <div class="col-2"> 
-            <img 
-              src="/images/1.jpg" 
+           <img  
+                src="../assets/dept.jpg" 
+              alt="" 
+              height="170px"
+              style="position: absolute; top: 30px; right: 0px;" 
+            /> 
+            <!-- <img  
+                :src="imagePath(image)" 
               alt="" 
               class="h-100" 
               style="position: absolute; top: 30px" 
-            /> 
+            />  -->
           </div> 
-          <div class="col-8 mt-5"> 
-            <h3 style="font-weight: bolder">{{concertName}}</h3> 
+          <div class="col-7 mt-5  ml-5"> 
+            <h3 style="font-weight: bolder">dept</h3> 
+            <!-- <h3 style="font-weight: bolder">{{concertName}}</h3>  -->
             <a href="https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_select">รายละเอียดคอนเสิร์ต</a> 
             <div class="row"> 
-                <div class="col-4"> 
+                <div class="col-3"> 
                     <h5 class="d-flex" style="font-weight: bolder; margin-top: 10px"> 
-                        รอบการแสดง : 
+                        รอบการแสดง :
                     </h5> 
                 </div> 
-                <div class="col-6  mt-2">     
-                    <h5>{{valueshow}}</h5> 
+                <div class="col-8 mt-2">     
+                    <h5>วันอังคารที่ 1 มิถุนายน 2021 21.10 น.</h5>
+                 
                 </div> 
-            </div>   
+            </div>  
  
  
              
@@ -135,6 +143,17 @@
                       </div> 
                       <div class="col"> 
                         <div class="text-right"> 
+                          <p class="card-text">วันอังคารที่ 1 มิถุนายน 2021</p> 
+                          <p class="card-text"> 21.10 น.</p> 
+                          <p class="card-text">A</p> 
+                          <p class="card-text text-success" >AVAILABLE</p> 
+                          <p class="card-text">500</p> 
+                          <p class="card-text">{{count_seat}}</p> 
+                          <p class="card-text">{{all_seat.toString()}}</p> 
+                        </div> 
+                      </div> 
+                      <!-- <div class="col"> 
+                        <div class="text-right"> 
                           <p class="card-text">{{valueshow}}</p> 
                           <p class="card-text">{{time}}</p> 
                           <p class="card-text">{{zone}}</p> 
@@ -143,7 +162,7 @@
                           <p class="card-text">{{count_seat}}</p> 
                           <p class="card-text">{{all_seat.toString()}}</p> 
                         </div> 
-                      </div> 
+                      </div>  -->
                     </div> 
                     <div class="text-center"> 
                       <a href="#" class="btn btn-danger">ยืนยันที่นั่ง</a> 

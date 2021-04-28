@@ -5,27 +5,36 @@
         <div class="row"> 
           <div class="col-2"> 
             <img  
+                src="../assets/dept.jpg" 
+              alt="" 
+              height="170px"
+              style="position: absolute; top: 30px; right: 0px;" 
+            /> 
+            <!-- <img  
                 :src="imagePath(image)" 
               alt="" 
               class="h-100" 
               style="position: absolute; top: 30px" 
-            /> 
+            />  -->
           </div> 
-          <div class="col-8 mt-5"> 
-            <h3 style="font-weight: bolder">{{concertName}}</h3> 
+          <div class="col-7 mt-5 ml-5"> 
+            <h3 style="font-weight: bolder">dept</h3> 
+            <!-- <h3 style="font-weight: bolder">{{concertName}}</h3>  -->
              <a href="https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_select">รายละเอียดคอนเสิร์ต</a> 
             <div class="row"> 
-                <div class="col-4"> 
+                <div class="col-3"> 
                     <h5 class="d-flex" style="font-weight: bolder; margin-top: 10px"> 
-                        รอบการแสดง 
+                        รอบการแสดง :
                     </h5> 
                 </div> 
                 <div class="col-6 mt-2">     
                     <select class="form-select" aria-label="Default select example" v-model="valueshow"> 
                         <option selected disabled>เลือกรอบการแสดง</option> 
-                        <option :value="showtime">{{showtime}}</option> 
-                        <option :value="endtime">{{endtime}}</option> 
+                        <option :value="showtime">วันอังคารที่ 1 มิถุนายน 2021 21.10 น.</option> 
+                        <!-- <option :value="showtime">{{showtime}}</option> 
+                        <option :value="endtime">{{endtime}}</option>  -->
                     </select> 
+                 
                 </div> 
             </div>                
           </div> 
@@ -89,7 +98,7 @@
                 <div class="card-body"> 
                   <div class="cyan"> 
                     <div class="row"> 
-                      <div class="col-7"> 
+                      <div class="col-6"> 
                         <img 
                           src="../assets/cyan_hotelK.png" 
                           alt="" 
@@ -97,7 +106,9 @@
                         /> 
                       </div> 
                       <div class="col-5 mt-1"> 
-                        <h5>xxx</h5> 
+                        <h6>500 บาท</h6> 
+                        <!-- <h6>xxx</h6>  -->
+                      
                       </div> 
                     </div> 
                   </div> 
@@ -151,10 +162,10 @@ export default {
       .catch((err) => { 
         console.log(err); 
       }); 
-    this.concertName = store.state.concertName 
-    this.showtime =  store.state.showtime.substring(0, 10) 
-    this.endtime =  store.state.endtime.substring(0, 10) 
-    this.time = store.state.endtime.substring(11, 16) 
+    // this.concertName = store.state.concertName 
+    // this.showtime =  store.state.showtime.substring(0, 10) 
+    // this.endtime =  store.state.endtime.substring(0, 10) 
+    // this.time = store.state.endtime.substring(11, 16) 
      
      
  
