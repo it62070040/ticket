@@ -66,7 +66,6 @@
         <div class="select-zone"> 
           <div class="row"> 
             <div class="col-8" style="padding-left: 6em"> 
-              > 
               <div class="map-zone"> 
                 <img src="../assets/zone(2).png" usemap="#"  /> 
                 <map name="" id=""> 
