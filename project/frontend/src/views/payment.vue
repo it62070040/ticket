@@ -4,26 +4,34 @@
       <div class="col-12"> 
         <div class="row"> 
           <div class="col-2"> 
-            <img 
-              src="/images/1.jpg" 
+           <img  
+                src="../assets/dept.jpg" 
+              alt="" 
+              height="170px"
+              style="position: absolute; top: 30px; right: 0px;" 
+            /> 
+            <!-- <img  
+                :src="imagePath(image)" 
               alt="" 
               class="h-100" 
               style="position: absolute; top: 30px" 
-            /> 
+            />  -->
           </div> 
-          <div class="col-8 mt-5"> 
-            <!-- <h3 style="font-weight: bolder">{{concertName}}</h3> --> 
+          <div class="col-7 mt-5  ml-5"> 
+            <h3 style="font-weight: bolder">dept</h3> 
+            <!-- <h3 style="font-weight: bolder">{{concertName}}</h3>  -->
             <a href="https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_select">รายละเอียดคอนเสิร์ต</a> 
             <div class="row"> 
-                <div class="col-4"> 
+                <div class="col-3"> 
                     <h5 class="d-flex" style="font-weight: bolder; margin-top: 10px"> 
-                        รอบการแสดง : 
+                        รอบการแสดง :
                     </h5> 
                 </div> 
-                <div class="col-6  mt-2">     
-                    <!-- <h5>{{valueshow}}</h5> --> 
+                <div class="col-8 mt-2">     
+                    <h5>วันอังคารที่ 1 มิถุนายน 2021 21.10 น.</h5>
+                 
                 </div> 
-            </div>   
+            </div>  
  
           </div> 
           <div class="col-2 mt-5 text-center"> 
@@ -45,12 +53,14 @@
                         <p class="card-text">ชื่อบัญชี</p> 
                         <p class="card-text">ธนาคาร</p> 
                         <p class="card-text">หมายเลขบัญชี</p> 
+                        <p class="card-text">จำนวนเงินที่ต้องชำระ</p> 
                       </div> 
                       <div class="col">  
                         <div class="text-right text-center"> 
-                          <p class="card-text">xxx</p> 
-                          <p class="card-text">xxx</p> 
-                          <p class="card-text">xxx</p> 
+                          <p class="card-text">นายนนทก นิ้วเพชร</p> 
+                          <p class="card-text">กรุงเทพ</p> 
+                          <p class="card-text">863-0-555512</p> 
+                          <p class="card-text">500 บาท</p> 
                         </div> 
                       </div> 
                     </div> 

@@ -39,8 +39,8 @@
           </div> 
           <div class="col-2 mt-5 text-center"> 
             <h2>ขั้นตอนที่</h2> 
-            <h1 style="font-weight: bolder">2/4</h1> 
-            <h4>เลือกที่นั่ง</h4> 
+            <h1 style="font-weight: bolder">3/4</h1> 
+            <h4>เลือกชนิดบัตร & ชำระเงิน</h4> 
           </div> 
         </div> 
       </div> 
@@ -101,7 +101,7 @@
                                         <div class="col"> 
                                             <div class="text-right"> 
                                                 <p class="card-text">A</p> 
-                                                <p class="card-text">A1</p> 
+                                                <p class="card-text">A2</p> 
                                                 <p class="card-text">1</p> 
                                                 <p class="card-text">500 บาท</p> 
                                                 <p class="card-text">E-TICKET</p> 
