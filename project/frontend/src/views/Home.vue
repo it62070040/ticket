@@ -81,7 +81,7 @@
                   </p><br>
                 </router-link>
               <div class="text-center" >
-                <a  class="btn btn-outline-danger" :to="`/step1/${concert.concert_id}`">ซื้อบัตร</a>
+                <router-link  class="btn btn-outline-danger" :to="`/step1/${concert.concert_id}`">ซื้อบัตร</router-link>
               </div>
             </div>
           </div>
