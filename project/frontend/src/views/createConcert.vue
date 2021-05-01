@@ -10,56 +10,72 @@
         </div>
       </div>
     </section>
-    <section class="hero">
-      <div class="hero-body">
-        <center><h1 class="title pt-3">Create Your Concert</h1></center>
+    <section class="pb-5">
+      <div class="text-center p-4">
+        <h1 class="title pt-3">สร้างงานแสดงของคุณ</h1>
       </div>
-    </section>
-    <section class="px-6 mt-2">
-      <div class="field mt-5">
+      <div class="form-group col-md-12 p-0 pb-2">
         <label class="label">ชื่อการแสดง</label>
         <div class="control">
-          <input v-model="titleCon" class="input" type="text" placeholder="Text input" />
+          <input v-model="titleCon" class="form-control" type="text" placeholder="กรุณาใส่ชื่อการแสดงของคุณ" />
         </div>
       </div>
 
-      <div class="field mt-2">
+      <div class="form-group pb-2">
         <label class="label">รายละเอียด</label>
         <div class="control">
           <!-- <textarea v-model="desConcert" id="editor"></textarea> -->
-           <textarea v-model="desConcert" class="textarea" placeholder="Textarea"></textarea>
+           <textarea v-model="desConcert" class="form-control" placeholder="รายละเอียดของการแสดง"></textarea>
            
         </div>
       </div>
 
-      <div class="field mt-2">
-        <label class="label">วันที่แสดง</label>
+      <div class="form-row">
+        <div class="form-group col-md-6 pb-2">
+          <label class="label">วันที่แสดง</label>
+          <input v-model="showtimeCon" class="form-control" type="datetime-local" style="cursor: pointer;"/>
+        </div>
+        <div class="form-group col-md-6 pb-2">
+          <label class="label">วันเปิดจำหน่าย</label>
+          <input v-model="buyAvailable" class="form-control" type="datetime-local" style="cursor: pointer;" />
+        </div>
+      </div>
+      <div class="form-group pb-2">
+        <label for="inputState">สถานที่จัด</label>
+        <select id="inputState" class="form-control"  style="cursor: pointer;">
+          <option selected>กรุณาเลือกสถานที่จัด</option>
+          <option>...</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-12 p-0 pb-2">
+        <label class="label">จำนวนที่นั่งทั้งหมด</label>
         <div class="control">
-          <input v-model="showtimeCon" class="input" type="datetime-local" placeholder="Text input" />
+          <input v-model="amountseat" class="form-control" type="number" placeholder="กรุณาจำนวนที่นั่งทั้งหมดในงาน" />
         </div>
       </div>
 
-       <!-- insert picture -->
-      <input class=" mt-5" multiple type="file" accept="image/png, image/jpeg, image/webp" @change="selectImages"/>
-      <div v-if="images" class="row mx-auto">
-        <div v-for="(image, index) in images" :key="image.id" class="col-3">
-          <div class="card" style="position:relative; border-style: hidden;">
-            <div id="card-img-top" style="height: 150px; width: auto; background-position: center;">
-                <img :src="showSelectImage(image)" alt="Placeholder image" />
+      <!-- insert picture -->
+      <div class="form-group pb-5">
+        <label for="inputState">รูปโปสเตอร์การแสดง</label>
+        <div class="custom-file">
+          <input class="custom-file-input" type="file" accept="image/png, image/jpeg, image/webp" @change="selectImages" style="cursor: pointer;"/>
+          <label class="custom-file-label" for="customFile">กรุณาเลือกรูปภาพของคุณ</label>
+          <div v-if="images" class="row mx-auto pt-3">
+            <div v-for="(image, index) in images" :key="image.id" class="col-3">
+              <div class="card" style="position:relative; border-style: hidden;">
+                <div id="card-img-top" style="height: 150px; width: auto; background-position: center;">
+                    <img :src="showSelectImage(image)" alt="Placeholder image" />
+                </div>
+                <footer class="card-footer">
+                  <a @click="deleteSelectImage(index)" class="card-footer-item has-text-danger">Delete</a>
+                </footer>
+              </div>
             </div>
-            <footer class="card-footer">
-              <a @click="deleteSelectImage(index)" class="card-footer-item has-text-danger">Delete</a>
-            </footer>
           </div>
         </div>
       </div>
 
-      <div class="field mt-2">
-        <label class="label">สถานที่จัด</label>
-        <div class="control">
-          <input v-model="locationCon" class="input" type="text" placeholder="Text input" />
-        </div>
-      </div>
 
       <!-- ราคา บัตร -->
       <!-- <div class="field mt-2">
@@ -69,19 +85,7 @@
         </div>
       </div> -->
 
-      <div class="field mt-2">
-        <label class="label">จำนวนที่นั่ง</label>
-        <div class="control">
-          <input v-model="amountseat" class="input" type="number" placeholder="Text input" />
-        </div>
-      </div>
 
-      <div class="field mt-2">
-        <label class="label">วันเปิดจำหน่าย</label>
-        <div class="control">
-          <input v-model="buyAvailable" class="input" type="datetime-local" placeholder="Text input" />
-        </div>
-      </div>
 
       <!-- สถานะคอนเสิร์ต -->
       <!-- <div class="control mt-3">
@@ -107,16 +111,12 @@
         </div>
       </div> -->
 
-      <div class="field is-grouped">
-        <div class="control">
-          <button @click="submitCon" class="button is-link">Submit</button>
-        </div>
-        <div class="control">
-          <button @click="$router.go(-1)" class="button is-link is-light">Cancel</button>
-        </div>
+      <div class="text-center">
+            <button type="submit" style="width: 300px" class="btn btn-warning btn-lg mr-4" @click="submitCon">Submit</button>
+            <button type="submit" style="width: 300px" class="btn btn-dark btn-lg" @click="$router.go(-1)">Cancel</button>
       </div>
     </section>
-  </div>
+  </div> 
 </template>
 
 <script>

@@ -19,7 +19,7 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/user',
+    path: '/users/:id',
     name: 'user',
     meta: { login: true},
     component: user,
@@ -34,6 +34,11 @@ const routes = [
     name: 'createConcert',
     meta: { login: true},
     component: () => import('../views/createConcert.vue')
+  },
+  {
+    path: '/detail/:id',
+    name: 'detail',
+    component: () => import('../views/detailConcert.vue')
   },
   { 
     path: '/seathotel', 
