@@ -104,38 +104,33 @@
                   {{ concert.concert_address }}
                 </p>
               <div class="text-center" >
-                <a href="#" class="btn btn-outline-danger">ซื้อบัตร</a>
+                <a  class="btn btn-outline-danger" :to="`/step1/${concert.concert_id}`">ซื้อบัตร</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+                                    <button @click="login()" >test</button>
+
     <!-- modal login -->
-        <div class="modal fade" tabindex="-1" role="dialog" id="modalLogin" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade" tabindex="-1" id="modalLogin" aria-hidden="true">
+            <div class="modal-dialog" >
                 <div class="modal-content">
-                    <!-- <div class="modal-header">
-                  <h5 class="modal-title">Modal title</h5>
-                </div> -->
                     <div class="modal-body ">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="close-but" title="Close" aria-hidden="true">&times;</span>
-                        </button>
                         <img class="mx-auto" src="../assets/logo.png" alt="logo" style="width: 10vw; display: block;">
                         <h3 class="text-center mt-3">เข้าสู่ระบบ</h3>
-                        <form>
+
                             <div class="form-group">
-                                <input type="email" class="form-control mt-5" id="" aria-describedby="emailHelp"
-                                    placeholder="อีเมล">
-                                <input type="password" class="form-control mt-3" id="" placeholder="รหัสผ่าน">
+                                <input type="email" class="form-control mt-5" id="" aria-describedby="emailHelp" placeholder="อีเมล" v-model="emailLogin">
+                                <input type="password" class="form-control mt-3" id="" placeholder="รหัสผ่าน" v-model="passLogin">
                             </div>
-                            <button type="submit" class="btn btn-danger mx-auto"
-                                style="display: block;">เข้าสู่ระบบ</button>
                             <a href="#" class="btn mx-auto text-muted" style=" display: block;">ลืมรหัสผ่าน</a>
                            
                             <hr class="my-0">
-                        </form>
+                            <button @click="login()"  class="btn btn-danger mx-auto" style="display: block;">เข้าสู่ระบบ</button>
+
+
                         <div class="text-center mt-3">
                             <h6>หากท่านยังไม่ได้เป็นสมาชิก</h6>
                             <a href="#" class="text-danger" data-dismiss="modal"  data-toggle="modal" data-target="#modalRegister">กรุณาสมัครสมาชิก</a>
@@ -242,10 +237,10 @@
                                 </template>
                             </div>
                             
-                            <button type="submit" class="btn btn-danger mx-auto"
-                                style="display: block;" @click="submit()">สมัครสมาชิก</button>
                            <hr class="my-0">     
                         </form>
+                        <button type="submit" class="btn btn-danger mx-auto"
+                                style="display: block;" @click="submit()">สมัครสมาชิก</button>
                         <div class="text-center mt-3">
                             <h6>หากท่านเป็นสมาชิกอยู่แล้ว</h6>
                             <a href="#" class="text-danger" data-dismiss="modal"  data-toggle="modal" data-target="#modalLogin">กรุณาเข้าสู่ระบบ</a>
@@ -259,7 +254,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from '@/plugins/axios';
 import {required, email, minLength, sameAs, maxLength} from "vuelidate/lib/validators";
 function complexPassword(value) {
   if (!(value.match(/[a-z]/) && value.match(/[A-Z]/) && value.match(/[0-9]/))) {
@@ -273,25 +268,51 @@ function mobile(value) {
 export default {
   data() {
     return {
+      emailLogin: 'marvel@gmail.com',
+      passLogin: 'Password1',
       concerts: [],
       search: '',
       images: [],
       date: null,
       error: null,
-      password: "",
-      confirmpassword: "",
-      email: "",
-      mobile: "",
-      first_name: "",
-      last_name: "",
-      address: "",
-      role: "",
+      password: "Password1",
+      confirmpassword: "Password1",
+      email: "test1@gmail.com",
+      mobile: "0845125469",
+      first_name: "new",
+      last_name: "user",
+      address: "america",
+      role: "cus",
     };
   },
   mounted () {
     this.getConcert()
   },
   methods: {
+    // buy(id){
+    //   location.href = 'localhost:8080/buy/'+id
+    // },
+    login(){
+      let data = {
+         emailLogin: this.emailLogin,
+         passLogin: this.passLogin
+       }
+       axios.post('/user/login', data)
+         .then(res => {
+           alert('login success')
+           const token = res.data.token                                
+           localStorage.setItem('token', token)
+           this.$emit('auth-change')
+           this.$router.push({path: '/'})
+            location.reload()
+
+         })
+         .catch(error => {
+           alert('Please login again')
+           this.error = error.response.data
+           alert(error.response.data)
+         })
+    },
     submit(){
       this.$v.$touch();
       if (!this.$v.$invalid) {
@@ -305,13 +326,12 @@ export default {
           last_name: this.last_name,
           role: this.role
         };
-        console.log(data)
-        alert(data)
         axios
-          .post("http://localhost:3000/signup", data)
+          .post("/signup", data)
           .then((response) => {
             console.log(response)
-            alert("Sign up Success");
+            alert("Sign up Success Please Login");
+            location.reload()
           })
           .catch((err) => {
             alert(err.response.data.details.message);
@@ -320,7 +340,7 @@ export default {
     },
     getConcert() {
       axios
-        .get("http://localhost:3000", {
+        .get("/", {
           params: {
             search: this.search
           }
@@ -334,7 +354,7 @@ export default {
     },
     imagePath(file_path) {
       if (file_path){
-        return 'http://localhost:3000/' + file_path
+        return '/' + file_path
       } 
       else {
         return 'https://bulma.io/images/placeholders/640x360.png'

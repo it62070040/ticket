@@ -21,6 +21,7 @@ const routes = [
   {
     path: '/user',
     name: 'user',
+    meta: { login: true},
     component: user,
   },
    // { 
@@ -31,29 +32,41 @@ const routes = [
   {
     path: '/create',
     name: 'createConcert',
+    meta: { login: true},
     component: () => import('../views/createConcert.vue')
   },
   { 
     path: '/seathotel', 
     name: 'seathotel', 
+    meta: { login: true},
     component: seathotel, 
   }, 
   { 
     path: '/hotel_K', 
     name: 'hotel_K', 
+    meta: { login: true},
     component: hotel_K, 
   }, 
   { 
     path: '/choosepayment', 
     name: 'choosepayment', 
+    meta: { login: true},
     component: choosepayment, 
   }, 
   { 
     path: '/payment', 
     name: 'payment', 
+    meta: { login: true},
     component: payment, 
-  } 
+  },
+  {
+    path: '/step1/:id',
+    name: 'step1',
+    component: () => import('../views/step1.vue')
+  },
+
 ]
+
 
 const router = new VueRouter({
   mode: 'history',
@@ -61,4 +74,19 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = !!localStorage.getItem('token')
+
+  if (to.meta.login && !isLoggedIn) {
+    alert('Please login first!')
+    next({ path: '/' })
+  }
+
+  if (to.meta.guess && isLoggedIn) {
+    alert("You've already logged in")
+    next({ path: '/'})
+  }
+
+  next()
+})
 export default router

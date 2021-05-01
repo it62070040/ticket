@@ -88,6 +88,7 @@ router.get("/concerts/:id", function (req, res, next) {
   const promise2 = pool.query("SELECT * FROM images WHERE concert_id=?", [
     req.params.id,
   ]);
+  
 
   // Use Promise.all() to make sure that all queries are successful
   Promise.all([promise1, promise2])

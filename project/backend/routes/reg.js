@@ -2,8 +2,14 @@ const express = require('express')
 const pool = require('../config')
 const Joi = require('joi')
 const bcrypt = require('bcrypt');
+const { generateToken } = require("../utils/token");
+const { isLoggedIn } = require('../middlewares')
 const router = express.Router();
 
+const loginSchema = Joi.object({
+         emailLogin: Joi.string().required().email(),
+         passLogin: Joi.string().required()
+     })
 function passwordValidator (value, helpers) {
     if(value.length < 8){
         throw new Joi.ValidationError('Password must contain at least 8 charecters')
@@ -61,12 +67,68 @@ router.post('/signup', async (req, res, next) => {
         [role, first_name, last_name, address, mobile, email, password]
         )
         conn.commit()
-        res.status(201).send()
+        res.status(201).send(first_name)
     }catch(error){
         conn.rollback()
         res.status(400).json(error);
     }finally{
         conn.release()
     }
+});
+
+router.post('/user/login', async (req, res, next) => {
+         try {
+             await loginSchema.validateAsync(req.body, { abortEarly: false })
+         } catch (err) {
+             return res.status(400).send(err)
+         }
+         const email = req.body.emailLogin
+         const password = req.body.passLogin
+     
+         const conn = await pool.getConnection()
+         await conn.beginTransaction()
+     
+         try {
+             // Check if username is correct
+             const [users] = await conn.query(
+                 'SELECT * FROM users WHERE email=?', 
+                 [email]
+             )
+             const user = users[0]
+             if (!user) {    
+                 throw new Error('Incorrect email or password')
+             }
+     
+             // Check if password is correct
+             if (!(await bcrypt.compare(password, user.password))) {
+                 throw new Error('Incorrect email or password')
+             }
+     
+             // Check if token already existed
+             const [tokens] = await conn.query(
+                 'SELECT * FROM tokens WHERE user_id=?', 
+                 [user.user_id]
+             )
+             let token = tokens[0]?.token
+             if (!token) {
+                 // Generate and save token into database
+                 token = generateToken()
+                 await conn.query(
+                     'INSERT INTO tokens(user_id, token) VALUES (?, ?)', 
+                     [user.user_id, token]
+                 )
+             }
+     
+             conn.commit()
+             res.status(200).json({'token': token})
+         } catch (error) {
+             conn.rollback()
+             res.status(400).json(error.toString())
+         } finally {
+             conn.release()
+         }
+});
+router.get('/user/me', isLoggedIn, async (req, res, next) => {
+    res.json(req.user)
 });
 exports.router = router

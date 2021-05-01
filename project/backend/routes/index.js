@@ -1,6 +1,8 @@
 const express = require("express");
 const pool = require("../config");
-
+const fs = require("fs");
+const multer = require("multer");
+const { isLoggedIn } = require('../middlewares')
 router = express.Router();
 
 router.get("/", async function (req, res, next) {
@@ -19,7 +21,7 @@ router.get("/", async function (req, res, next) {
     return res.status(500).json(err)
   }
 });
-router.get("/hotel_K", async function (req, res, next) {
+router.get("/hotel_K", isLoggedIn, async function (req, res, next) {
   try {
     const [rows, fields] = await pool.query(
       `SELECT * FROM concerts;`
@@ -30,7 +32,7 @@ router.get("/hotel_K", async function (req, res, next) {
     return next(err)
   }
 });
-router.get("/seathotel", async function (req, res, next) {
+router.get("/seathotel", isLoggedIn, async function (req, res, next) {
   try {
     const [rows, fields] = await pool.query(
       `SELECT * FROM hotel_k;`
@@ -40,7 +42,7 @@ router.get("/seathotel", async function (req, res, next) {
     return next(err)
   }
 });
-router.put("/seathotel/:seat", async function (req, res, next) {
+router.put("/seathotel/:seat", isLoggedIn, async function (req, res, next) {
   try {
      await pool.query(
       `UPDATE hotel_k SET status = '1' WHERE seat_id = ?;`, [req.params.seat]
@@ -53,7 +55,7 @@ router.put("/seathotel/:seat", async function (req, res, next) {
     return next(err)
   }
 });
-router.delete("/seathotel/:seat", async function (req, res, next) {
+router.delete("/seathotel/:seat", isLoggedIn, async function (req, res, next) {
   try {
      await pool.query(
       `UPDATE hotel_k SET status = '0' WHERE seat_id = ?;`, [req.params.seat]
@@ -66,7 +68,7 @@ router.delete("/seathotel/:seat", async function (req, res, next) {
     return next(err)
   }
 });
-router.put("/choose", async function (req, res, next) {
+router.put("/choose", isLoggedIn, async function (req, res, next) {
   try {
       const [rows, fields] = await pool.query(
       // `SELECT * FROM hotel_k;`
@@ -76,7 +78,7 @@ router.put("/choose", async function (req, res, next) {
     return next(err)
   }
 });
-router.get("/payment", async function (req, res, next) {
+router.get("/payment", isLoggedIn, async function (req, res, next) {
   try {
       const [rows, fields] = await pool.query(
       // `SELECT * FROM hotel_k;`
