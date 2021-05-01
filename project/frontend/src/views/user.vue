@@ -6,23 +6,30 @@
         style="border-color: gray;"
       >
         <div class="profile">
-          <div class="mb-3 " style="background-color: #f4f4f4;padding: 20px;">
-            <b>ชื่อ นามสกุล</b>
-            <span class="d-block">email</span>
+          <div class="mb-3 pt-3 pb-2 text-center" style="background-color: #f4f4f4;">
+            <b >{{name}}</b>
+            <p >{{user.email}}</p>
           </div>
-          <div class="mb-5 ">
-            <span class="icon d-block" @click="showTicket()" style="padding-right: 35px">
+          <div class="mb-5">
+            <span class="icon d-block pl-2" style="cursor: pointer;" @click="showTicket()" >
+              <i class="fa fa-ticket"></i>
                 ตั๋วของฉัน
             </span>
-            <span class="icon d-block " @click="showHistory()">
-               ประวัติการสั่งซื้อ
+            <span class="icon d-block pl-2" style="cursor: pointer;" @click="showHistory()">
+              <i class="fa fa-ticket"></i> ประวัติการสั่งซื้อ
             </span>
             <hr style="background-color: #f4f4f4;" />
-            <span class="icon d-block" @click="showEditProfile()" style="padding-left: 20px">
+            
+            <span class="icon d-block pl-2" style="cursor: pointer;" @click="showEditProfile()">
+              <i class="fa fa-ticket"></i>
               แก้ไขข้อมูลส่วนตัว
             </span>
+
             <hr style="background-color: #f4f4f4;" />
-            <a class="dropdown-item" href="#">ออกจากระบบ</a>
+              <span class="icon d-block pl-2" style="cursor: pointer;">
+              <i class="fa fa-ticket"></i>
+              ออกจากระบบ
+            </span>
           </div>
         </div>
       </div>
@@ -33,16 +40,38 @@
 <script>
 import myticket from "../components/myticket";
 import store from "@/vuex/store.js";
+import axios from "axios";
 export default {
   data() {
     return {
       store,
+      user: {},
+      error: null,
+      name: "",
+
+
     };
+  },
+  mounted() {
+    this.getUser(this.$route.params.id);
   },
   components: {
     myticket,
   },
   methods: {
+    getUser(userID){
+      axios
+        .get(`http://localhost:3000/users/${userID}`)
+        .then((response) => {
+          this.user = response.data.user[0];
+          this.name  = this.user.fname+" "+this.user.lname
+
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+
+    },
     showTicket() {
       this.store.state.col1 = true;
       this.store.state.col2 = false;
@@ -64,3 +93,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+span:hover{
+  background-color: rgb(213, 213, 213);
+}
+</style>

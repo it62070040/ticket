@@ -19,7 +19,7 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/user',
+    path: '/users/:id',
     name: 'user',
     component: user,
   },
@@ -32,6 +32,11 @@ const routes = [
     path: '/create',
     name: 'createConcert',
     component: () => import('../views/createConcert.vue')
+  },
+  {
+    path: '/detail/:id',
+    name: 'detail',
+    component: () => import('../views/detailConcert.vue')
   },
   { 
     path: '/seathotel', 

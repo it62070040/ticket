@@ -1,57 +1,25 @@
 <template>
   <div class="box pb-5">
     <!-- slide img -->
-    <div
-      class="container-fluid mx-auto"
-      style="background-color: black; margin: 0px 0px 0px 0px"
-    >
-      <div
-        class="box mx-auto"
-        style="width: 60vw; height: auto; margin: 0px 0px 0px 0px"
-      >
-        <div
-          id="carouselExample1"
-          class="carousel slide z-depth-1-half"
-          data-ride="carousel"
-        >
+    <div class="container-fluid mx-auto" style="background-color: black; margin: 0px 0px 0px 0px">
+      <div class="box mx-auto" style="width: 60vw; height: auto; margin: 0px 0px 0px 0px" >
+        <div  id="carouselExample1" class="carousel slide z-depth-1-half" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img
-                class="d-block w-100"
-                src="../assets/bts1.jpg"
-                alt="First slide"
-              />
+              <img class="d-block w-100" src="../assets/bts1.jpg"  alt="First slide" />
             </div>
             <div class="carousel-item">
-              <img
-                class="d-block w-100"
-                src="../assets/bts2.jpg"
-                alt="Second slide"
-              />
+              <img class="d-block w-100" src="../assets/bts2.jpg"  alt="Second slide"/>
             </div>
             <div class="carousel-item">
-              <img
-                class="d-block w-100"
-                src="../assets/cats1.png"
-                alt="Third slide"
-              />
+              <img  class="d-block w-100" src="../assets/cats1.png" alt="Third slide"/>
             </div>
           </div>
-          <a
-            class="carousel-control-prev"
-            href="#carouselExample1"
-            role="button"
-            data-slide="prev"
-          >
+          <a class="carousel-control-prev" href="#carouselExample1" role="button" data-slide="prev" >
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
           </a>
-          <a
-            class="carousel-control-next"
-            href="#carouselExample1"
-            role="button"
-            data-slide="next"
-          >
+          <a class="carousel-control-next" href="#carouselExample1" role="button" data-slide="next" >
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
@@ -59,23 +27,28 @@
       </div>
     </div>
 
-<div class="columns">
-          <div class="column is-half">
-            <input class="input" type="text" v-model="search" placeholder="Search blog(s)">
-          </div>
-          <div class="column is-half">
-            <button @click="getConcert" class="button">Search</button>
-          </div>
+    <!-- Search concserts -->
+    <div class=" pt-5 form-inline pb-4">
+        <div class="row mx-auto form-group mb-2 ">
+            <div class="form-group mx-sm-3 mb-2">
+              <input class="form-control" id="search" style="min-width: 50vw" type="text" v-model="search" placeholder="ค้นหางานแสดงที่ต้องการ">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+              <button class="btn btn-primary"   style="font-size: 20px" @click="getConcert">ค้นหา</button>
+            </div>
         </div>
+      </div> 
+
     <!-- show concert -->
     <div class="container">
-      <div class="row mx-auto">
-        <h4 class="m-4">คอนเสิร์ต</h4>
+      <div class="row mx-auto m-5">
+        <h4 class="m-0 pl-3 pt-1" >คอนเสิร์ต</h4>
+        
         <!-- dropdown -->
-        <div class="btn-group m-4 mr-0   ml-auto">
+        <div class="btn-group mr-3 ml-auto">
           <button
             type="button"
-            class="btn btn-danger dropdown-toggle"
+            class="btn btn-primary dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
@@ -93,18 +66,22 @@
       <div class="row mx-auto">
         <div class="col-4 col-md-3 col-lg-2 pb-4" v-for="concert in concerts" :key="concert.id" >
           <div class="card" style="position:relative; border-style: hidden;">
+            <router-link  :to="`/detail/${concert.concert_id}`">
             <div id="card-img-top"  style="height: 150px; width: auto; background-position: center;">
-              <img  :src="imagePath(concert.file_path)" alt="image cap">
+                <img :to="`/detail/${concert.concert_id}`"  :src="imagePath(concert.file_path)" alt="image cap">
             </div>
-            <div class="card-body" style="min-height:200px; padding: 0.5rem;">
-                <p class="card-title pt-2" >{{ concert.concert_title }}</p>
-                <p class="card-text" style="height:10px; font-weight: 500;" :value="date">{{ concert.concert_showtime}}</p>
-                <!-- <p class="card-text" >{{findDate}}</p> -->
-                <p class="card-text" style="height:20px; font-weight: 500;">
-                  {{ concert.concert_address }}
-                </p>
+            </router-link>
+            <div :to="`/detail/${concert.concert_id}`" class="card-body" style="min-height:200px; padding: 0.5rem;">
+              <router-link  :to="`/detail/${concert.concert_id}`">
+                  <p class="card-title pt-2" >{{ concert.concert_title }}</p>
+                  <p class="card-text" style="height:10px; font-weight: 500;" >{{concert.concert_showtime.substring(0, 10)}}</p>
+                  <!-- <p class="card-text" >{{findDate}}</p> -->
+                  <p class="card-text" style="height:20px; font-weight: 500;">
+                    {{ concert.concert_address }}
+                  </p><br>
+                </router-link>
               <div class="text-center" >
-                <a href="#" class="btn btn-outline-danger">ซื้อบัตร</a>
+                <button type="button" class="btn btn-warning">ซื้อบัตร</button>
               </div>
             </div>
           </div>
@@ -276,7 +253,7 @@ export default {
       concerts: [],
       search: '',
       images: [],
-      date: null,
+      date: "",
       error: null,
       password: "",
       confirmpassword: "",
@@ -327,6 +304,7 @@ export default {
         })
         .then((response) => {
           this.concerts = response.data;
+
         })
         .catch((err) => {
           console.log(err);
@@ -340,12 +318,12 @@ export default {
         return 'https://bulma.io/images/placeholders/640x360.png'
       }
     },
-    shortContent(content) {
-      if (content.length > 200) {
-        return content.substring(0, 197) + '...'
-      }
-      return content
-    },
+    // shortContent(content) {
+    //   if (content.length > 200) {
+    //     return content.substring(0, 197) + '...'
+    //   }
+    //   return content
+    // },
   },
   validations: {
     email: {
@@ -381,12 +359,33 @@ export default {
 </script>
 
 <style scoped>
+#search{
+  width: 100%;
+    padding: 21px 150px 21px 60px;
+    font-size: 24px;
+    letter-spacing: 0.51px;
+    line-height: 29px;
+    color: rgb(74, 74, 74);
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 5px 1px rgb(64 60 67 / 16%);
+}
+.card{
+  box-shadow: 0 0 10px 0 #e1e1e1;
+  border-radius: 5px;
+}
+.card:hover {
+  box-shadow: 0 0 30px 0 #d5d5d5;
+  border-radius: 5px;
+
+}
 .card-text{
   font-size: 12px;
   line-height: 13pt;
 }
 .card-title{
-  height:60px; 
+  height:40px; 
   font-size:14px; 
   font-weight: 600; 
   line-height: 13pt;
@@ -397,6 +396,8 @@ export default {
   max-height: 100%;
   margin: auto auto;
   display: block;
+  min-width: 100%;
+  min-height: 100%;
 }
 .modal-dialog{
     overflow-y: initial !important
@@ -418,5 +419,11 @@ export default {
     transition: .5s;
     color: red;
     cursor: pointer;
+}
+p{
+  color: black;
+}
+a:link {
+  text-decoration: none;
 }
 </style>
