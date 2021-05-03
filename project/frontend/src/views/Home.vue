@@ -56,9 +56,9 @@
             เรียงลำดับ
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">วันแสดง</a>
-            <a class="dropdown-item" href="#">ชื่อการแสดง</a>
-            <a class="dropdown-item" href="#">การแสดงมาใหม่</a>
+            <a class="dropdown-item" @click="sortConcert(1)" style="cursor: pointer">ยอดนิยม</a>
+            <a class="dropdown-item" @click="sortConcert(2)" style="cursor: pointer">เก่ากว่า - ใหม่กว่า</a>
+            <a class="dropdown-item" @click="sortConcert(3)" style="cursor: pointer">ใหม่กว่า - เก่ากว่า</a>
             <!-- <div class="dropdown-divider"></div> -->
           </div>
         </div>
@@ -325,6 +325,23 @@ export default {
         .then((response) => {
           this.concerts = response.data;
           console.log(this.concerts)
+
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    sortConcert(id){
+        axios
+        .get("/", {
+          params: {
+            sort: id
+            
+          }
+        })
+        .then((response) => {
+          this.concerts = response.data;
+          // console.log(id)
 
         })
         .catch((err) => {
