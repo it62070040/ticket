@@ -103,7 +103,7 @@
                             </div>
                             <a href="#" class="btn mx-auto text-muted" style=" display: block;">ลืมรหัสผ่าน</a>
                            
-                            <hr class="my-0">
+                            <hr class="my-0 pb-3">
                             <button @click="login()"  class="btn btn-danger mx-auto" style="display: block;">เข้าสู่ระบบ</button>
 
 
@@ -120,7 +120,7 @@
             <div class="modal-dialog" role="document" >
                 <div class="modal-content">
                     <div class="modal-body" style="padding: 30px;">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close pt-4" data-dismiss="modal" aria-label="Close">
                             <span class="close-but" aria-hidden="true" >&times;</span>
                         </button>
                         <img class="mx-auto" src="../assets/logo.png" alt="logo" style="width: 10vw; display: block;">
@@ -128,7 +128,7 @@
                         mt-3">สมัครสมาชิก</h3>
                         <small id="" class="form-text text-muted text-center">กรุณากรอกข้อมูลให้ครบถ้วน</small>
                         <form>
-                            <div class="form-group">
+                            <div class="form-group  pt-4">
                                 <div class="custom-control custom-radio custom-control-inline">
                                   <input type="radio" id="rd_1" name="rd" class="custom-control-input red" value="cus" v-model="role">
                                   <label class="custom-control-label" for="rd_1">ผู้ซื้อ</label>
@@ -137,83 +137,83 @@
                                   <input type="radio" id="rd_2" name="rd" class="custom-control-input red" value="sell" v-model="role">
                                   <label class="custom-control-label" for="rd_2">ผู้ขาย</label>
                                 </div>
-                                <input type="text" class="form-control mt-5 " id="" placeholder="ชื่อ" v-model="$v.first_name.$model" :class="{'is-danger' : $v.first_name.$error}">
+                                <input type="text" class="form-control mt-3 " id="" placeholder="ชื่อ" v-model="$v.first_name.$model" :class="{'is-danger' : $v.first_name.$error}">
                                 <template v-if="$v.first_name.$error">
                                   <div>
-                                    <p class="help is-danger" v-if="!$v.first_name.required">
-                                      This field is required
-                                    </p>
-                                    <p class="help is-danger" v-if="!$v.first_name.maxLength">
-                                      your name too long
-                                      </p>
+                                    <div class="error text-danger" v-if="!$v.first_name.required">
+                                      กรุณากรอกข้อมูล
+                                    </div>
+                                    <div class="error text-danger" v-if="!$v.first_name.maxLength">
+                                      ชื่อคุณยาวเกินไป
+                                      </div>
                                   </div>
                                 </template>
                                 <input type="text" class="form-control mt-3" id="" placeholder="นามสกุล" v-model="$v.last_name.$model" :class="{'is-danger' : $v.last_name.$error}">
                                 <template v-if="$v.last_name.$error">
                                   <div>
-                                    <p class="help is-danger" v-if="!$v.last_name.required">
-                                      This field is required
-                                    </p>
-                                    <p class="help is-danger" v-if="!$v.last_name.maxLength">
-                                      your last name too long
-                                      </p>
+                                    <div class="error text-danger" v-if="!$v.last_name.required">
+                                      กรุณากรอกข้อมูล
+                                    </div>
+                                    <div class="error text-danger" v-if="!$v.last_name.maxLength">
+                                      นามสกุลคุณยาวเกินไป
+                                      </div>
                                   </div>
                                 </template>
                                 <input type="email" class="form-control mt-3" id="" aria-describedby="emailHelp" placeholder="อีเมล" v-model="$v.email.$model" :class="{'is-danger' : $v.email.$error}">
                                 <template v-if="$v.email.$error">
                                   <div>
-                                    <p class="help is-danger" v-if="!$v.email.required">
-                                      This field is required
-                                    </p>
-                                    <p class="help is-danger" v-if="!$v.email.email">
-                                      Invalid email
-                                      </p>
+                                    <div class="error text-danger" v-if="!$v.email.required">
+                                      กรุณากรอกข้อมูล
+                                    </div>
+                                    <div class="error text-danger" v-if="!$v.email.email">
+                                      อีเมลไม่ถูกต้อง
+                                      </div>
                                   </div>
                                 </template>
                                 <input type="password" class="form-control mt-3" id="" placeholder="รหัสผ่าน" v-model="$v.password.$model" :class="{'is-danger' : $v.password.$error}">
                                 <template v-if="$v.password.$error">
-                                  <p class="help is-danger" v-if="!$v.password.required">
-                                    This field is required
-                                  </p>
-                                  <p class="help is-danger" v-if="!$v.password.minLength">
-                                    password too short
-                                  </p>
-                                  <p class="help is-danger" v-if="!$v.password.complex">
-                                    password too weak (you must have A-Z , a-z , 0-9)
-                                  </p>
+                                  <div class="error text-danger" v-if="!$v.password.required">
+                                    กรุณากรอกข้อมูล
+                                  </div>
+                                  <div class="error text-danger" v-if="!$v.password.minLength">
+                                    รหัสผ่านสั้นเกินไป
+                                  </div>
+                                  <div class="error text-danger" v-else-if="!$v.password.complex">
+                                    รหัสผ่านของคุณอ่อนแอ (ควรมีอักษร A-Z , a-z , 0-9)
+                                  </div>
                                 </template>
                                 <input type="password" class="form-control mt-3" id="" placeholder="ยืนยันรหัสผ่าน" v-model="$v.confirmpassword.$model" :class="{'is-danger' : $v.confirmpassword.$error}">
                                 <template v-if="$v.confirmpassword.$error">
-                                  <p class="help is-danger" v-if="!$v.confirmpassword.required">
-                                    This field is required
-                                  </p>
-                                  <p class="help is-danger" v-if="!$v.confirmpassword.sameAs">
-                                    password doesn't match
-                                  </p>
+                                  <div class="error text-danger" v-if="!$v.confirmpassword.required">
+                                    กรุณากรอกข้อมูล
+                                  </div>
+                                  <div class="error text-danger" v-if="!$v.confirmpassword.sameAs">
+                                    รหัสผ่านยืนยันไม่ถูกต้อง
+                                  </div>
                                 </template>
                                 <label for="" class="mt-3">ที่อยู่</label>
                                 <textarea class="form-control " id="" rows="2" v-model="$v.address.$model" :class="{'is-danger' : $v.address.$error}"></textarea>
                                 <template v-if="$v.address.$error">
                                   <div>
-                                    <p class="help is-danger" v-if="!$v.address.required">
-                                    This field is required
-                                  </p>
+                                    <div class="error text-danger" v-if="!$v.address.required">
+                                    กรุณากรอกข้อมูล
+                                  </div>
                                   </div>
                                 </template>
                                 <input type="text" class="form-control mt-3" id="" placeholder="เบอร์โทรศัพท์" v-model="$v.mobile.$model" :class="{'is-danger' : $v.mobile.$error}">
                                 <template v-if="$v.mobile.$error">
                                   <div>
-                                    <p class="help is-danger" v-if="!$v.mobile.required">
-                                    This field is required
-                                    </p>
-                                    <p class="help is-danger" v-if="!$v.mobile.mobile">
-                                    Invalid mobile number
-                                    </p>
+                                    <div class="error text-danger" v-if="!$v.mobile.required">
+                                    กรุณากรอกข้อมูล
+                                    </div>
+                                    <div class="error text-danger" v-else-if="!$v.mobile.mobile">
+                                    เบอร์โทรศัพท์ไม่ถูกต้อง
+                                    </div>
                                   </div>
                                 </template>
                             </div>
                             
-                           <hr class="my-0">     
+                           <hr class="my-0 pb-3">     
                         </form>
                         <button type="submit" class="btn btn-danger mx-auto"
                                 style="display: block;" @click="submit()">สมัครสมาชิก</button>
@@ -446,7 +446,7 @@ export default {
 }
 .close-but{
   position: absolute;
-  top: 4px; 
+  top: 20px; 
   right: 4px; 
   width: 32px;  
   height: 32px;
