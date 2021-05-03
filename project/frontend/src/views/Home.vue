@@ -56,9 +56,9 @@
             เรียงลำดับ
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">วันแสดง</a>
-            <a class="dropdown-item" href="#">ชื่อการแสดง</a>
-            <a class="dropdown-item" href="#">การแสดงมาใหม่</a>
+            <a class="dropdown-item" @click="sortConcert(1)" style="cursor: pointer">ยอดนิยม</a>
+            <a class="dropdown-item" @click="sortConcert(2)" style="cursor: pointer">เก่าสุด - ใหม่สุด</a>
+            <a class="dropdown-item" @click="sortConcert(3)" style="cursor: pointer">ใหม่สุด - เก่าสุด</a>
             <!-- <div class="dropdown-divider"></div> -->
           </div>
         </div>
@@ -77,7 +77,7 @@
                   <p class="card-text" style="height:10px; font-weight: 500;" >{{concert.concert_showtime.substring(0, 10)}}</p>
                   <!-- <p class="card-text" >{{findDate}}</p> -->
                   <p class="card-text" style="height:20px; font-weight: 500;">
-                    {{ concert.concert_address }}
+                    {{ concert.address_name}}
                   </p><br>
                 </router-link>
               <div class="text-center" >
@@ -323,6 +323,24 @@ export default {
         })
         .then((response) => {
           this.concerts = response.data;
+          console.log(this.concerts)
+
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    sortConcert(id){
+        axios
+        .get("/", {
+          params: {
+            sort: id
+            
+          }
+        })
+        .then((response) => {
+          this.concerts = response.data;
+          // console.log(id)
 
         })
         .catch((err) => {

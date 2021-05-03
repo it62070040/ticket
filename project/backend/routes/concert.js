@@ -82,7 +82,7 @@ router.post("/concerts", upload.array("myImage", 5),async function (req, res, ne
 // Blog detail
 router.get("/concerts/:id", function (req, res, next) {
   // Query data from 3 tables
-  const promise1 = pool.query("SELECT * FROM concerts WHERE concert_id=?", [
+  const promise1 = pool.query("SELECT * FROM concert.concerts c left outer join concert.location l on (c.concert_address = l.address_id) WHERE c.concert_id=?", [
     req.params.id,
   ]);
   const promise2 = pool.query("SELECT * FROM images WHERE concert_id=?", [
@@ -95,6 +95,7 @@ router.get("/concerts/:id", function (req, res, next) {
     .then((results) => {
       const [concerts, blogFields] = results[0];
       const [images, imageFields] = results[1];
+     
       res.json({
         concert: concerts[0],
         images: images,

@@ -265,7 +265,7 @@ export default {
       // พอไปฝั่ง backend มันจะจัด file ให้เป็น Array เพื่อเอาไปใช้งานต่อได้
 
     axios
-        .post("http://localhost:4000/concerts", formData)
+        .post("http://localhost:3000/concerts", formData)
         .then(() => this.$router.push({name: 'home'}))
         .catch((e) => console.log(e.response.data));
       }
