@@ -8,11 +8,11 @@ router = express.Router();
 router.get("/", async function (req, res, next) {
   try {
     const search = req.query.search || ''
-    let sql = 'SELECT a.*, b.file_path FROM concerts AS a LEFT JOIN (SELECT * FROM images WHERE main=1) AS b ON a.concert_id = b.concert_id'
+    let sql = 'SELECT c.*, i.file_path , l.* FROM concert.concerts c left outer JOIN concert.location l  on (c.concert_address = l.address_id) LEFT outer join (SELECT * FROM concert.images WHERE main=1) i ON (c.concert_id = i.concert_id) '
     let cond = []
 
     if (search.length > 0) {
-      sql = 'SELECT a.*, b.file_path FROM concerts AS a LEFT JOIN (SELECT * FROM images WHERE main=1) AS b ON a.concert_id = b.concert_id WHERE a.concert_title LIKE ?;'
+      sql = 'SELECT c.*, i.file_path , l.* FROM concert.concerts c left outer JOIN concert.location l  on (c.concert_address = l.address_id) LEFT outer join (SELECT * FROM concert.images WHERE main=1) i ON (c.concert_id = i.concert_id) WHERE c.concert_title LIKE ?;'
       cond = [`%${search}%`, `%${search}%`]
     }
     const [rows, fields] = await pool.query(sql, cond);

@@ -77,7 +77,7 @@
                   <p class="card-text" style="height:10px; font-weight: 500;" >{{concert.concert_showtime.substring(0, 10)}}</p>
                   <!-- <p class="card-text" >{{findDate}}</p> -->
                   <p class="card-text" style="height:20px; font-weight: 500;">
-                    {{ concert.concert_address }}
+                    {{ concert.address_name}}
                   </p><br>
                 </router-link>
               <div class="text-center" >
@@ -324,6 +324,7 @@ export default {
         })
         .then((response) => {
           this.concerts = response.data;
+          console.log(this.concerts)
 
         })
         .catch((err) => {
@@ -332,7 +333,7 @@ export default {
     },
     imagePath(file_path) {
       if (file_path){
-        return '/' + file_path
+        return 'http://localhost:3000/' + file_path
       } 
       else {
         return 'https://bulma.io/images/placeholders/640x360.png'

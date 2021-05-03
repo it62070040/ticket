@@ -51,9 +51,6 @@
               <div class="box-txt" style="color: aliceblue;">
                 <div class="row">
                   <div class="col-12">
-                    <p>
-                      <a href="#"><small>คอนเสิร์ต</small></a>
-                    </p>
                     <h3 class="title" style="color: aliceblue;">
                       {{ concert.concert_title }}
                     </h3>
@@ -74,7 +71,7 @@
                         ><small> สถานที่แสดง</small>
                         <p class="txt">
                           <span
-                            ><p>{{concert.concert_address}}</p
+                            ><p>{{concert.address_name}}</p
                             ></span
                           >
                         </p>
@@ -135,9 +132,10 @@
                                             </a>
                                         </div>
                                         <div class="box-txt">
-                                            <p>
-                                                <a href="/_venue.php?venue_id=12269" class="venue">{{concert.concert_address}}</a>
-                                            </p>
+                                            <h2>{{concert.address_name}} </h2>
+                                            <div>
+                                              <img :src="concert.image" style="height: 100px; object-fit: cover" />
+                                            </div>
                                             <p><small class="txt-gray">ราคาบัตร</small><br>3,000 / 2,500 / 2,000 / 1,500 / 1,000 / 800 </p>
 
                                         </div>
@@ -223,7 +221,7 @@ h4,h3 {
 }
 p {
     font-family: 'Prompt', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bolder;
 }
 
