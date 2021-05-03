@@ -57,8 +57,8 @@
           </button>
           <div class="dropdown-menu">
             <a class="dropdown-item" @click="sortConcert(1)" style="cursor: pointer">ยอดนิยม</a>
-            <a class="dropdown-item" @click="sortConcert(2)" style="cursor: pointer">เก่ากว่า - ใหม่กว่า</a>
-            <a class="dropdown-item" @click="sortConcert(3)" style="cursor: pointer">ใหม่กว่า - เก่ากว่า</a>
+            <a class="dropdown-item" @click="sortConcert(2)" style="cursor: pointer">เก่าสุด - ใหม่สุด</a>
+            <a class="dropdown-item" @click="sortConcert(3)" style="cursor: pointer">ใหม่สุด - เก่าสุด</a>
             <!-- <div class="dropdown-divider"></div> -->
           </div>
         </div>
