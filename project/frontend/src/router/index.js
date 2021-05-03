@@ -67,12 +67,26 @@ const routes = [
   {
     path: '/step1/:id',
     name: 'step1',
+    meta: { login: true},
     component: () => import('../views/step1.vue')
   },
   {
     path: '/step2/:id',
     name: 'step2',
+    meta: { login: true},
     component: () => import('../views/step2.vue')
+  },
+  {
+    path: '/step3/:id',
+    name: 'step3',
+    meta: { login: true},
+    component: () => import('../views/step3.vue')
+  },
+  {
+    path: '/step4/:id',
+    name: 'step4',
+    meta: { login: true},
+    component: () => import('../views/step4.vue')
   },
 
 ]

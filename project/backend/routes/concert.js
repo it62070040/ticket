@@ -144,5 +144,24 @@ router.get("/booked/:id", async function (req, res, next) {
   }  
 });
 
+router.get("/seller/:id", async function (req, res, next) {
+  
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+  try {
+    let [rows,fields] = await conn.query("SELECT * from banking where user_id = ?", [req.params.id]);
+
+    await conn.commit();
+    res.json(rows[0]);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
+
 
 exports.router = router;

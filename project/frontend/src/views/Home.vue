@@ -88,7 +88,6 @@
         </div>
       </div>
     </div>
-                                    <button @click="login()" >test</button>
 
     <!-- modal login -->
         <div class="modal fade" tabindex="-1" id="modalLogin" aria-hidden="true">
@@ -332,7 +331,7 @@ export default {
     },
     imagePath(file_path) {
       if (file_path){
-        return '/' + file_path
+        return 'http://localhost:3000/' + file_path
       } 
       else {
         return 'https://bulma.io/images/placeholders/640x360.png'

@@ -29,7 +29,7 @@
                 </h5>
               </div>
               <div class="col-8 mt-2">
-                <h5>{{ concerts.concert.concert_showtime }}</h5>
+                <h5>{{ new Date(concerts.concert.concert_showtime).toLocaleDateString("th", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} น.</h5>
               </div>
             </div>
           </div>
@@ -93,23 +93,45 @@
                 </div>
               </div>
 
-              <!-- {{ seat_rows }} -->
 
-              <div class="row" style="margin-right: 12em; margin-top: 5em">
+              <!-- hotel -->
+              <div class="row" style="position: absolute; left: -5em; margin-right: 12em; margin-top: 5em" v-if="location.address_id == 1">
                 <!-- zone A -->
-                <div>
-                  <p class="mt-5 text-white" style="position: absolute; right: 60em">
-                    
-                  </p>
-                  <a class="btn" style="padding: 0; margin-top: 1.5em" v-for="seat in seatStatus" :key="seat">
-                    <!-- {{item}} -->
-                    <img src="../assets/seat.png" alt="" width="50vw" height="50vh" v-if="seat.status == 0" @click="click(seat.id)"/>
-                    <img src="../assets/seat_bookings.png" alt="" width="50vw" height="50vh" v-if="seat.status == 2" @click="click(seat.id)"/> 
-                    <img src="../assets/seat_full.png" class="isDisabled" alt="" width="50vw" height="50vh" v-if="seat.status == 1"/> 
+                <div class="d-flex" v-for="(row, col) in seat_rows()" :key="col">
+                  <p class="text-white" style="padding-right: 3em; margin-top: 3em;"  v-if="row.length > 0">{{col}}</p>
+                  <a class="btn" style="padding: 0.12em; margin-top: 1.5em" v-for="seat in row" :key="seat">
+                    <img src="../assets/seat.png" alt="" width="51vw" height="50vh" v-if="seat.status == 0" @click="click(seat.id)"/>
+                    <img src="../assets/seat_bookings.png" alt="" width="51vw" height="52vh" v-if="seat.status == 2" @click="click(seat.id)"/> 
+                    <img src="../assets/seat_full.png" class="isDisabled" alt="" width="51vw" height="53vh" v-if="seat.status == 1"/>
+                  </a>
+                 </div> 
+              </div>
+
+              <!-- union -->
+              <div class="row" style="position: absolute; left: -5em; margin-right: 12em; margin-top: 5em" v-if="location.address_id == 2">
+                <!-- zone A -->
+                <div class="d-flex" v-for="(row, col) in seat_rows()" :key="col">
+                  <p class="text-white" style="padding-right: 3em; margin-top: 3em;" v-if="row.length > 0">{{col}}</p>
+                  <a class="btn" style="padding: 0.12em; margin-top: 1.5em" v-for="seat in row" :key="seat">
+                    <img src="../assets/seat.png" alt="" width="39vw" height="48vh" v-if="seat.status == 0" @click="click(seat.id)"/>
+                    <img src="../assets/seat_bookings.png" alt="" width="39vw" height="50vh" v-if="seat.status == 2" @click="click(seat.id)"/> 
+                    <img src="../assets/seat_full.png" class="isDisabled" alt="" width="39vw" height="50vh" v-if="seat.status == 1"/> 
                   </a>
                 </div>
               </div>
 
+              <!-- centre -->
+              <div class="row" style="position: absolute; left: -5em; margin-right: 12em; margin-top: 5em" v-if="location.address_id == 3">
+                <!-- zone A -->
+                <div class="d-flex" v-for="(row, col) in seat_rows()" :key="col">
+                  <p class="text-white" style="padding-right: 3em; margin-top: 3em;" v-if="row.length > 0">{{col}}</p>         
+                  <a class="btn" style="padding: 0.12em; margin-top: 1.5em" v-for="seat in row" :key="seat">
+                    <img src="../assets/seat.png" alt="" width="34vw" height="45vh" v-if="seat.status == 0" @click="click(seat.id)"/>
+                    <img src="../assets/seat_bookings.png" alt="" width="34vw" height="48vh" v-if="seat.status == 2" @click="click(seat.id)"/> 
+                    <img src="../assets/seat_full.png" class="isDisabled" alt="" width="34vw" height="48vh" v-if="seat.status == 1"/> 
+                </a>
+                </div>
+              </div>
 
             </div>
 
@@ -119,7 +141,6 @@
                   <h5 class="card-header text-center font-weight-bold">
                     รายละเอียดการจอง
                   </h5>
-                  <button @click="test()">test</button>
                   <div class="card-body">
                     <!-- <h5 class="card-title">Special title treatment</h5> -->
                     <div class="row">
@@ -134,33 +155,21 @@
                       </div>
                       <div class="col">
                         <div class="text-right">
-                          <p class="card-text">วันอังคารที่ 1 มิถุนายน 2021</p>
-                          <p class="card-text">21.10 น.</p>
+                          <p class="card-text">{{new Date(concerts.concert.concert_showtime).toLocaleDateString("th", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) }}</p>
+                          <p class="card-text">{{new Date(concerts.concert.concert_showtime).toLocaleDateString("th", { hour: 'numeric', minute: 'numeric'}).slice(-5)}} น.</p>
                           <p class="card-text">A</p>
                           <p class="card-text text-success">AVAILABLE</p>
-                          <p class="card-text">500</p>
-                          <p class="card-text">xxx</p>
-                          <p class="card-text">xxx</p>
+                          <p class="card-text">{{countPrice}} บาท</p>
+                          <p class="card-text">{{countChoose}}</p>
+                          <p class="card-text">{{choose.toString()}}</p>
                         </div>
                       </div>
-                      <!-- <div class="col"> 
-                        <div class="text-right"> 
-                          <p class="card-text">{{valueshow}}</p> 
-                          <p class="card-text">{{time}}</p> 
-                          <p class="card-text">{{zone}}</p> 
-                          <p class="card-text text-success" >AVAILABLE</p> 
-                          <p class="card-text">{{count_price}}</p> 
-                          <p class="card-text">{{count_seat}}</p> 
-                          <p class="card-text">{{all_seat.toString()}}</p> 
-                        </div> 
-                      </div>  -->
+   
                     </div>
                     <div class="text-center">
-                      <a href="#" class="btn btn-danger">ยืนยันที่นั่ง</a>
+                      <a class="btn btn-danger" @click="next()">ยืนยันที่นั่ง</a>
                     </div>
-                    <!-- <div class="text-center mt-2"> 
-                      <a href="#" class="btn btn-light">เลือกโซนอื่น</a> 
-                    </div> -->
+               
                   </div>
                 </div>
               </div>
@@ -174,17 +183,22 @@
 <script>
 import axios from "@/plugins/axios";
 export default {
+  props: ["user"],
   data() {
     return {
       concerts: null,
       location: null,
-      seatArray: null,
-      alpha: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+      // seatArray: null,
+      alpha: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"],
       booked: null,
       allBooked: '',
       allBookedArray: [],
       seatStatus: [],
-      choose: []
+      choose: [],
+      countChoose: 0,
+      countPrice: 0,
+      detail: []
+      
     };
   },
   mounted() {
@@ -251,6 +265,8 @@ export default {
             }
             })
             this.choose.push(this.seatStatus[id].seat)
+            this.countChoose = this.choose.length
+            this.countPrice += this.concerts.concert.price
         }
         else{
             this.seatStatus.filter((a) => {
@@ -259,22 +275,44 @@ export default {
             }
             })
             this.choose.splice(this.choose.indexOf(id), 1)
+            this.countChoose = this.choose.length
+            this.countPrice -= this.concerts.concert.price
         }
         
+    },
+    seat_rows() {
+      var rows = {};
+      this.alpha.forEach((a) => {
+        let row = [];
+
+
+
+        this.seatStatus.forEach((e) => {
+          if (e.seat.startsWith(a)) {
+            row.push(e);
+          }
+        });
+
+
+
+        rows[a] = row;
+      });
+      return rows;
+    },
+    next(){
+      
+      if(this.choose.length > 4){
+        alert("เลือกได้สูงสุด 4 ที่")
+      }
+      else if(this.choose.length > 0 && this.choose.length < 5){
+        this.detail.push({choose: this.choose, countChoose: this.countChoose, countPrice: this.countPrice})
+        location.href =`http://localhost:8080/step3/${this.concerts.concert.concert_id}`
+        localStorage.setItem('detail', JSON.stringify(this.detail))
+      }
+      else{
+        alert("กรุณาเลือกที่นั่ง")
+      }
     }
-    // seat_rows() {
-    //   var rows = {};
-    //   this.alpha.forEach((a) => {
-    //     let row = [];
-    //     this.seatStatus.forEach((e) => {
-    //       if (e.startsWith(a)) {
-    //         row.push(e);
-    //       }
-    //     });
-    //     rows[a] = row;
-    //   });
-    //   return rows;
-    // },
   },
 };
 </script>
