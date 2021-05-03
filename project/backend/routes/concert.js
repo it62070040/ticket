@@ -106,6 +106,43 @@ router.get("/concerts/:id", function (req, res, next) {
     });
 });
 
+router.get("/location/:id", async function (req, res, next) {
+  
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+  try {
+    let [rows,fields] = await conn.query("SELECT * FROM location WHERE address_id = ?", [req.params.id]);
+
+    await conn.commit();
+    res.json(rows[0]);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
+
+router.get("/booked/:id", async function (req, res, next) {
+  
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+  try {
+    let [rows,fields] = await conn.query("SELECT booking_seat FROM booking group by booking_seat, concert_concert_id having concert_concert_id = ?", [req.params.id]);
+
+    await conn.commit();
+    res.json(rows);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
 
 
 exports.router = router;

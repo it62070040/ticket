@@ -69,6 +69,11 @@ const routes = [
     name: 'step1',
     component: () => import('../views/step1.vue')
   },
+  {
+    path: '/step2/:id',
+    name: 'step2',
+    component: () => import('../views/step2.vue')
+  },
 
 ]
 

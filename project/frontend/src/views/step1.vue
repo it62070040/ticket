@@ -26,7 +26,7 @@
                     <select class="form-control" aria-label="Default select example" v-model="valueshow"> 
                         <option selected disabled>เลือกรอบการแสดง</option> 
                         <option :value="showtime">{{concerts.concert.concert_showtime}}</option> 
-                        <option :value="endtime">{{concerts.concert.concert_endtime}}</option> 
+                        <!-- <option :value="endtime">{{concerts.concert.concert_endtime}}</option>  -->
                     </select> 
                  
                 </div> 
@@ -70,14 +70,14 @@
           <div class="row"> 
             <div class="col-8" style="padding-left: 6em"> 
               <div class="map-zone"> 
-                <img src="" usemap="#"  /> 
+                <img :src="location.image" usemap="#"  /> 
                 <map name="" id=""> 
                   <area 
                     shape="poly" 
                     coords="57,138,447,136,447,618,55,620" 
                     style="position: absolute; left: 7em" 
                     onclick="selectzone(this.href, event)" 
-                    href="#" 
+                    :href ="'http://localhost:8080/step2/' + concerts.concert.concert_id"
                     
                     
                   /> 
@@ -124,7 +124,9 @@ import axios from '@/plugins/axios';
 export default {
     data(){
         return{
-           concerts: null
+           concerts: null,
+           location: null,
+           seatArray: null,
         };
     },
     mounted() {
@@ -135,13 +137,27 @@ export default {
       axios
         .get(`/concerts/${id}`)
         .then((response) => {
+          console.log(response.data)
           this.concerts = response.data
+          this.getlocation(response.data.concert.address_id)
         })
         .catch((error) => {
           this.error = error.response.data.message;
         });
     },
+    getlocation(id){
+      axios
+        .get(`/location/${id}`)
+        .then((response) => {
+          this.location = response.data
+          this.seatArray = (response.data.seat).split(" ")
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    }
   }
     
 }
 </script>
+
