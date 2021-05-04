@@ -164,7 +164,7 @@
 </template>
 <script>
 import store from "@/vuex/store.js";
-import axios from "axios";
+import axios from "@/plugins/axios";
 export default {
   data() {
     return {
@@ -184,7 +184,7 @@ export default {
   methods: {
     getUser(userID){
       axios
-        .get(`http://localhost:3000/users/${userID}`)
+        .get(`/users/${userID}`)
         .then((response) => {
           this.users = response.data.user;
           console.log(response.data)
