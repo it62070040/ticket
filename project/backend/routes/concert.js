@@ -82,7 +82,7 @@ router.post("/concerts", upload.array("myImage", 5),async function (req, res, ne
 // Blog detail
 router.get("/concerts/:id", function (req, res, next) {
   // Query data from 3 tables
-  const promise1 = pool.query("SELECT * FROM concerts concert_id=?", [
+  const promise1 = pool.query("SELECT * FROM concerts where concert_id=?", [
     req.params.id,
   ]);
   const promise2 = pool.query("SELECT * FROM images WHERE concert_id=?", [
