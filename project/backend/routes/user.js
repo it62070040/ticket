@@ -81,7 +81,7 @@ router.put("/edit", async function (req, res, next) {
     try {
       await singupschema.validateAsync(req.body, {abortEarly: false})
   } catch (err) {
-    return res.status(400).json(error)
+    return res.status(400).message(error)
   }
       const conn = await pool.getConnection()
       await conn.beginTransaction()
@@ -113,7 +113,7 @@ router.put("/edit", async function (req, res, next) {
         
       }catch(error){
         conn.rollback()
-        res.status(400).json(error);
+        res.status(400).json(error.toString())
       }finally{
           conn.release()
       }
