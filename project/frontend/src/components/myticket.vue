@@ -3,18 +3,15 @@
     <div class="pl-3 pt-2" v-show="store.state.col1">
       <h3 class="text-center pb-4">ตั๋วของฉัน</h3>
       <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-5 pb-4"  v-for="user, index in users" :key="user.id">
-          <div v-if="user.status" class="card" style=" background-color: #f4f4f4; float: left;">
-            <img class="card-img-top" :src="'http://localhost:3000/'+user.file_path" alt="Card image cap" />
+        <div class="col-lg-3 col-md-4 col-sm-5 pb-4"  v-for="order, index in orders" :key="order.booking_id">
+          <div v-if="order.status" class="card" style=" background-color: #f4f4f4; float: left;">
+            <img class="card-img-top" :src="'http://localhost:3000/'+order.file_path" alt="Card image cap" />
               <div class="card-body">
-                <p style="overflow: hidden; font-weight: 1000; height: 45px; font-size: 16px" class="card-title">{{user.concert_title}}</p>
+                <p style="overflow: hidden; font-weight: 1000; height: 45px; font-size: 16px" class="card-title">{{order.concert_title}}</p>
                 <p class="card-text">
-                  <strong>โซน : </strong>{{user.booking_seat.substring(0,1)}}<br>
-                  <strong>ที่นั่ง : </strong>{{user.booking_seat}}<br>
-                  <strong>สถานที่ : </strong>{{user.concert_address}}<br>
-                  <strong>วันที่แสดง : </strong>{{user.concert_showtime.substring(0,10)}}<br>
-                  <strong>เวลาที่แสดง : </strong>{{user.concert_showtime.substring(11,16)}}<br>
-                  <strong>ราคา : </strong>{{user.booking_price}}<br>
+                  <strong>โซน : </strong>{{zone}}<br>
+                  <strong>ที่นั่ง : </strong>{{order.booking_seat}}<br>
+                  <strong>ราคา : </strong>{{order.booking_price}}<br>
                 </p>
                 <center>
                   <button class="btn btn-primary" data-toggle="modal" data-target="#e_ticket" @click="eTicket(index)">E-TICKET</button>
@@ -42,19 +39,19 @@
         <th>สถานะ</th>
       </tr>
     </thead>
-    <tbody v-for="user in users" :key="user.id" >
-      <tr class="text-center">
-        <td>{{user.booking_id}}</td>
-        <td>{{user.concert_title}}</td>
-        <td>{{user.concert_showtime.substring(0,10)}}</td>
-        <td>{{user.concert_showtime.substring(11,16)}}</td>
-        <td>{{user.booking_seat.substring(0,1)}}</td>
-        <td>{{user.booking_seat}}</td>
-        <td>{{user.booking_amount}}</td>
-        <td>{{user.booking_price}}</td>
-        <td>{{user.booking_price}}</td>
-        <td style="color: lawngreen; font-weight: 1000;" v-if="user.status">Confirm</td>
-        <td v-if="!user.status">Pending</td>
+    <tbody v-for="order in orders" :key="order.booking_id" >
+      <tr class="text-center"  >
+        <td>{{order.booking_id}}</td>
+        <td>{{order.concert_title}}</td>
+        <td>{{new Date(order.concert_showtime).toLocaleDateString("th", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'}) }}</td>
+        <td>{{new Date(order.concert_showtime).toLocaleDateString("th", { hour: 'numeric', minute: 'numeric'}).slice(-5)}} น.</td>
+        <td>{{order.booking_seat}}</td>
+        <td>{{order.booking_seat}}</td>
+        <td>{{order.booking_amount}}</td>
+        <td>{{order.booking_price}}</td>
+        <td>{{order.booking_price}}</td>
+        <td style="color: lawngreen; font-weight: 1000;" v-if="order.status">Confirm</td>
+        <td v-if="!order.status">Pending</td>
       </tr>
 
     </tbody>
@@ -67,19 +64,19 @@
         <div class="form-group row">
           <label for="staticEmail" class="col-sm-2 col-form-label">ชื่อ</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" v-model="fname"/>
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">นามสกุล</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" v-model="lname" />
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">ที่อยู่</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" v-model="address"/>
           </div>
         </div>
         <div class="form-group row">
@@ -87,13 +84,13 @@
             >หมายเลขโทรศัพท์</label
           >
           <div class="col-sm-10">
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" v-model="phone" />
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">รหัสผ่านเก่า</label>
           <div class="col-sm-10">
-            <input type="password" class="form-control" />
+            <input type="password" class="form-control" v-model="oldpassword"/>
           </div>
         </div>
         <div class="form-group row">
@@ -101,16 +98,16 @@
             >รหัสผ่านใหม่</label
           >
           <div class="col-sm-10">
-            <input type="password" class="form-control" />
+            <input type="password" class="form-control" v-model="newpassword"/>
           </div>
         </div>
         <div class="form-group row pb-3">
           <label class="col-sm-2 col-form-label">ยืนยันรหัสผ่านใหม่</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" />
+          <div class="col-sm-10"> 
+            <input type="password" class="form-control" v-model="confirmpassword" />
           </div>
         </div>
-        <center><button type="submit" class="btn btn-danger">บันทึก</button></center>
+        <center><button type="submit" class="btn btn-danger" @click="editUser(id)">บันทึก</button></center>
       </form>
     </div>
 
@@ -129,11 +126,11 @@
                             <div class="card-body pt-4">
                                 <h3 class="card-title pb-2">{{ticket.concert_title}}</h3>
                                 <h6 class="card-text">ของ</h6>
-                                <h4 class="card-text">{{ticket.fname + " " +ticket.lname}}</h4><br>
+                                <h4 class="card-text">{{users.fname}} {{users.lname}}</h4><br>
                                 <div class="row pb-4">
                                     <div class="col-6">
                                         <h5>Zone</h5>
-                                        <h5>{{ticketZone}}</h5>
+                                        <h5>{{zone}}</h5>
                                     </div>
                                     <div class="col-6">
                                         <h5>Seat</h5>
@@ -144,11 +141,11 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <h5>Show date</h5>
-                                        <h5>{{ticketDate}}</h5>
+                                        <h5>{{new Date(ticket.concert_showtime).toLocaleDateString("th", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'}) }}</h5>
                                     </div>
                                     <div class="col-6">
                                         <h5>Show time</h5>
-                                        <h5>{{ticketTime}}</h5>
+                                        <h5>{{new Date(ticket.concert_showtime).toLocaleDateString("th", { hour: 'numeric', minute: 'numeric'}).slice(-5)}} น.</h5>
                                     </div>
                                 </div>
                                 <img class="card-img-bottom" src="../assets/qr1.png" style="max-height: 232px;width: auto" alt="Card image cap">
@@ -164,44 +161,88 @@
 </template>
 <script>
 import store from "@/vuex/store.js";
-import axios from "@/plugins/axios";
+import axios from "axios";
 export default {
   data() {
     return {
       store,
       users: {},
-      error: null,
+      orders: {},
       dateCon: "",
       ticket: {},
       ticketZone: "",
       ticketDate: "",
       ticketTime: "",
+      fname: "hhhhhhhh",
+      lname: "hhhhhhhh",
+      address: "hhhhhhhhhh",
+      phone: "0875810813",
+      oldpassword: "",
+      newpassword: "Password1",
+      confirmpassword: "Password1",
+      id: "",
+      zone: 'A'
     };
   },
   mounted() {
     this.getUser(this.$route.params.id);
+    this.getUserOrder(this.$route.params.id);
   },
   methods: {
-    getUser(userID){
+    editUser(){
+      let data = {
+        first_name: this.fname,
+        last_name: this.lname,
+        address: this.address,
+        mobile: this.phone,
+        password: this.newpassword,
+        confirmpassword:  this.confirmpassword,
+        oldpassword: this.oldpassword,
+        id: this.id
+      }
       axios
-        .get(`/users/${userID}`)
-        .then((response) => {
-          this.users = response.data.user;
-          console.log(response.data)
-          this.dateCon = String(response.data.user.concert_showtime).substring(0,10);
-
+        .put(`http://localhost:3000/edit`, data)
+         .then((response) => {
+            console.log(response)
+            alert("Edit Success");
+            location.reload()
+          })
+        .catch(error => {
+           alert('You have wrong password!')
+           this.error = error.response.data
+           alert(error.response.data)
+         })
+    },
+    getUser(userID){
+      axios.get(`http://localhost:3000/user/${userID}`)
+        .then((res) => {
+          this.users = res.data;
+          // console.log(res.data)
+          this.id = res.data.user_id       
+          // this.dateCon = String(res.data.user.concert_showtime).substring(0,10);
         })
-        .catch((error) => {
-          this.error = error.response.data.message;
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getUserOrder(id){
+      axios.get(`http://localhost:3000/UserBooked/${id}`)
+        .then((res) => {
+          this.orders = res.data;
+          console.log(res.data)  
+          // this.dateCon = String(res.data.user.concert_showtime).substring(0,10);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
     eTicket(id){
-      this.ticket = this.users[id]
-      this.ticketZone = this.ticket.booking_seat.substring(0,1)
-      this.ticketDate = this.ticket.concert_showtime.substring(0,10)
-      this.ticketTime = this.ticket.concert_showtime.substring(11,16)
-      console.log(this.ticket)
-      console.log(id)
+      this.ticket = this.orders[id]
+        // this.ticketZone = this.ticket.booking_seat.substring(0,1)
+        // this.ticketDate = this.ticket.concert_showtime.substring(0,10)
+        // this.ticketTime = this.ticket.concert_showtime.substring(11,16)
+      
+      console.log(this.orders[id])
     }
   },
   name: "myticket",

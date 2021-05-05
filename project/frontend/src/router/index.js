@@ -19,11 +19,18 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/users/:id',
+    path: '/user/:id',
     name: 'user',
     meta: { login: true},
     component: user,
   },
+  {
+    path: '/edit',
+    name: 'edit',
+    // meta: { login: true},
+    // component: user,
+  },
+  
    // { 
   //   path: '/seatunion', 
   //   name: 'seatunion', 

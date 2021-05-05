@@ -7,7 +7,7 @@
       >
         <div class="profile">
           <div class="mb-3 pt-3 pb-2 text-center" style="background-color: #f4f4f4;">
-            <b >{{name}}</b>
+            <b >{{user.fname}} {{user.lname}}</b>
             <p >{{user.email}}</p>
           </div>
           <div class="mb-5">
@@ -47,7 +47,6 @@ export default {
       store,
       user: {},
       error: null,
-      name: "",
 
 
     };
@@ -61,15 +60,14 @@ export default {
   methods: {
     getUser(userID){
       axios
-        .get(`http://localhost:3000/users/${userID}`)
+        .get(`http://localhost:3000/user/${userID}`)
         .then((response) => {
-          this.user = response.data.user[0];
-          this.name  = this.user.fname+" "+this.user.lname
+          this.user = response.data;
 
         })
-        .catch((error) => {
-          this.error = error.response.data.message;
-        });
+        .catch((err) => {
+            alert(err.response.data.details.message);
+          });
 
     },
     showTicket() {
