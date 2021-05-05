@@ -79,17 +79,47 @@
       </div>
 
       <div class="form-group col-md-12 p-0 ">
-        <label class="label">จำนวนที่นั่งทั้งหมด</label>
+        <label class="label">ราคา (ราคา / 1 ใบ)</label>
         <div class="control">
-          <input v-model="$v.amountseat.$model" class="form-control" :class="{ 'form-control is-invalid': $v.amountseat.$error }" type="text" placeholder="กรุณาจำนวนที่นั่งทั้งหมดในงาน" />
+          <input v-model="$v.seatPrice.$model" class="form-control" :class="{ 'form-control is-invalid': $v.seatPrice.$error }" type="text" placeholder="กรุณากรอกราคาที่นั่งในคอนเสิร์ต" />
           <!-- show error -->
-           <template v-if="$v.amountseat.$error">
-            <div class="error text-danger" v-if="!$v.amountseat.required">กรุณากรอกข้อมูล</div>
-            <div class="error text-danger" v-else-if="!$v.amountseat.seat">กรุณาใส่ตัวเลข</div>
-            <div class="error text-danger" v-else-if="!$v.amountseat.min_seat">จำนวนที่นั่งควรอยู่ระหว่าง 100-9999 ที่</div>
+           <template v-if="$v.seatPrice.$error">
+            <div class="error text-danger" v-if="!$v.seatPrice.required">กรุณากรอกข้อมูล</div>
+            <div class="error text-danger" v-else-if="!$v.seatPrice.seat">กรุณาใส่ตัวเลข</div>
+            <div class="error text-danger" v-else-if="!$v.seatPrice.min_seat">จำนวนที่นั่งควรอยู่ระหว่าง 100-9999 ที่</div>
           </template>      
         </div>
       </div>
+
+     <div class="form-row m-0 p-0">
+       <div class="form-group col-md-6">
+        <label class="label">เลขบัญชีธนาคาร</label>
+        <div class="control">
+          <input v-model="$v.bankAccount.$model" :class="{ 'form-control is-invalid': $v.bankAccount.$error }" type="text" class="form-control" placeholder="กรุณากรอกเลขบัญชีธนาคาร" />
+          <!-- show error -->
+           <template v-if="$v.bankAccount.$error">
+            <div class="error text-danger" v-if="!$v.bankAccount.required">กรุณากรอกข้อมูล</div>
+            <div class="error text-danger" v-else-if="!$v.bankAccount.bankAccount">กรุณาใส่ตัวเลข</div>
+          </template>      
+        </div>
+      </div>
+
+    <div class="form-group col-md-6 was-validated">
+      <label >ธนาคาร</label>
+      <select id="bankName" v-model="bankName" class="form-control" style="cursor: pointer;" required>
+        <option selected></option>
+        <option value="ธนาคารกรุงเทพ">ธนาคารกรุงเทพ</option>
+        <option value="ธนาคารกสิกรไทย">ธนาคารกสิกรไทย</option>
+        <option value="ธนาคารกรุงไทย">ธนาคารกรุงไทย</option>
+        <option value="ธนาคารทหารไทย">ธนาคารทหารไทย</option>
+        <option value="ธนาคารไทยพาณิชย์">ธนาคารไทยพาณิชย์</option>
+        <option value="ธนาคารกรุงศรีอยุธยา">ธนาคารกรุงศรีอยุธยา</option>
+        <option value="ธนาคารออมสิน">ธนาคารออมสิน</option>
+        <option value="	ธนาคารธนชาต">	ธนาคารธนชาต</option>
+      </select>
+      <div class="invalid-feedback">กรุณาเลือกธนาคาร</div>
+    </div>
+     </div>
 
       <div class="form-group was-validated">
         <label >สถานที่จัด</label>
@@ -141,12 +171,13 @@ import {
   maxLength,
 } from "vuelidate/lib/validators";
 
-function seat (value){
+function isNum (value){
   if (!value.match(/[0-9]/)) {
       return false;
     }
   return true
 }
+
 function min_seat (value){
   if (Number(value) < 100 || Number(value) > 9999) {
       return false;
@@ -186,8 +217,10 @@ export default {
       titleCon: "",
       desConcert: "",
       locationCon: "",
-      amountseat: "",
-      buyAvailable: null,
+      seatPrice: "",
+      bankAccount: "",
+      bankName: "",
+      // buyAvailable: null,
       showtimeCon: null,
       statusCon: "coming soon",
     };
@@ -210,11 +243,15 @@ export default {
       required: required,
       buy_avail: buy_avail
     },
-    amountseat:{
+    seatPrice:{
       required: required,
-      seat: seat,
+      seat: isNum,
       min_seat:  min_seat
     },
+    bankAccount:{
+      required: required,
+      bankAccount: isNum,
+    }
 
   },
 
@@ -242,7 +279,7 @@ export default {
         formData.append("concert_address", this.locationCon);
         formData.append("concert_showtime", this.showtimeCon);
         // formData.append("concert_address", this.priceCon);
-        formData.append("concert_amountseat", this.amountseat);
+        formData.append("concert_seatPrice", this.seatPrice);
         formData.append("buy_available", this.buyAvailable);
         // formData.append("pinned", this.pinnedBlog ? 1 : 0);
         formData.append("concert_status", "coming soon");
