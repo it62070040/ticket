@@ -68,8 +68,8 @@
                 </div> 
             </div> 
             <div class="mt-4 text-center"> 
-                <a href="#" class="btn btn-danger" @click="home()">กลับสู่หน้าหลัก</a> 
-                 <a href="#" class="btn btn-danger">แจ้งโอนเงิน</a> 
+                <a  class="btn btn-danger text-white" @click="home()">กลับสู่หน้าหลัก</a> 
+                 <a  class="btn btn-danger text-white" @click="pay()">แจ้งโอนเงิน</a> 
             </div>
             
         </div> 
@@ -78,6 +78,7 @@
 <script>
 import axios from "@/plugins/axios";
 export default {
+  props: ["user"],
     data() {
     return {
         concerts: {},
@@ -90,6 +91,10 @@ export default {
     this.detail = JSON.parse(localStorage.getItem('detail'))
   },
   methods:{
+      pay(){
+        location.href = `http://localhost:8080/paymentform/${this.concerts.concert.concert_id}`
+
+      },
       getConcert(id) {
       axios
         .get(`/concerts/${id}`)

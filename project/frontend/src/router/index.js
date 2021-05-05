@@ -88,6 +88,12 @@ const routes = [
     meta: { login: true},
     component: () => import('../views/step4.vue')
   },
+  {
+    path: '/paymentform/:id',
+    name: 'paymentform',
+    meta: {login: true},
+    component: ()  => import('../views/paymentform.vue')
+  }
 
 ]
 

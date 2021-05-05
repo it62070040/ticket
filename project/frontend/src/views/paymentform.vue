@@ -7,29 +7,29 @@
                             <fieldset disabled>
                                 <div class="form-group mt-4">
                                     <label>หมายเลขคำสั่งซื้อ</label>
-                                    <input type="text" id="disabledTextInput" class="form-control" value="xxx">
+                                    <input type="text" id="disabledTextInput" class="form-control" v-model="this.mybook.booking_id">
                                 </div>
                             </fieldset>
-                            <label>ชื่อ - นามสกุลของบัญชีที่โอน</label>
+                            <label>ชื่อ - นามสกุล</label>
                             <div class="form-group row">
                                 <div class="col">
-                                    <input v-model="$v.firstName.$model" :class="{ 'border-danger': $v.firstName.$error }"  type="text" class="form-control" placeholder="ชื่อ">
-                                    <template v-if="$v.firstName.$error">
-                                        <p class="help text-danger" v-if="!$v.firstName.required">
+                                    <input v-model="$v.fname.$model" :class="{ 'border-danger': $v.fname.$error }"  type="text" class="form-control" placeholder="ชื่อ">
+                                    <template v-if="$v.fname.$error">
+                                        <p class="help text-danger" v-if="!$v.fname.required">
                                             กรุณากรอกชื่อ
                                         </p>
-                                        <p class="help text-danger" v-if="!$v.firstName.name">
+                                        <p class="help text-danger" v-if="!$v.fname.name">
                                             ชื่อต้องเป็นตัวอักษรเท่านั้น
                                         </p>
                                     </template>
                                 </div>
                                 <div class="col">
-                                    <input v-model="$v.lastName.$model" :class="{ 'border-danger': $v.lastName.$error }" type="text" class="form-control" placeholder="นามสกุล">
-                                    <template v-if="$v.lastName.$error">
-                                        <p class="help text-danger" v-if="!$v.lastName.required">
+                                    <input v-model="$v.lname.$model" :class="{ 'border-danger': $v.lname.$error }" type="text" class="form-control" placeholder="นามสกุล">
+                                    <template v-if="$v.lname.$error">
+                                        <p class="help text-danger" v-if="!$v.lname.required">
                                             กรุณากรอกนามสกุล
                                         </p>
-                                        <p class="help text-danger" v-if="!$v.lastName.name">
+                                        <p class="help text-danger" v-if="!$v.lname.name">
                                             นามสกุลต้องเป็นตัวอักษรเท่านั้น
                                         </p>
                                     </template>
@@ -55,12 +55,6 @@
                                     </template>
                                 </div>
                             </div>
-                            <fieldset disabled>
-                                <div class="form-group">
-                                    <label>โอนเข้าธนาคาร</label>
-                                    <input type="text" id="disabledTextInput" class="form-control" value="xxx">
-                                </div>
-                            </fieldset>
 
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="customFile"  @change="selectImage" accept="image/png, image/jpeg, image/webp" style="cursor: pointer;">
@@ -84,20 +78,16 @@
                         </form>
                          <div class="my-4 text-center"> 
                                 <a href="#" class="btn btn-danger" @click="submitBlog()">ยืนยัน</a> 
-                                <a href="#" class="btn btn-secondary ml-3" >กลับไปหน้าที่แล้ว</a>
+                                <!-- <a  class="btn btn-secondary ml-3 text-white" @click="backPage()" >กลับไปหน้าที่แล้ว</a> -->
                             </div> 
 
  </div>
   </div>
 </template>
 <script>
-// import axios from '@/plugins/axios';
+import axios from '@/plugins/axios';
 import {
   required,
-//   minLength,
-//   maxLength,
-//   url,
-//   maxValue
 } from "vuelidate/lib/validators";
 
 function name (value){
@@ -107,21 +97,26 @@ function name (value){
   return true
 } 
 export default {
+  props: ["user"],
+  mounted(){
+    this.getmyBooked(this.user.user_id)
+  },
   data() {
     return {
-      firstName: '',
-      lastName: '',
+      fname: '',
+      lname: '',
       date: null,
       time: null,
-      image: []
+      image: [],
+      mybook: {}
     };
   },
   validations:{
-    firstName:{
+    fname:{
         required: required,
         name: name,
     },
-    lastName:{
+    lname:{
         required: required,
         name: name,
     },
@@ -137,6 +132,16 @@ export default {
     
   },
   methods: {
+    getmyBooked(id){
+      axios
+        .get(`/mybook/${id}`)
+        .then((response) => {
+          this.mybook = response.data
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    },
     selectImage(event) {
       this.image = event.target.files;
       console.log(this.image[0].name)
@@ -150,13 +155,17 @@ export default {
       this.image.splice(index, 1);
     },
     submitBlog() {
+      console.log(this.date + ' ' + this.time)
       this.$v.$touch();
       if(!this.$v.$invalid){
         let formData = new FormData();
-      formData.append("firstName", this.firstName);
-      formData.append("lastName", this.lastName);
-      formData.append("date", this.date);
-      formData.append("time", this.time);
+        formData.append("booking_id", this.mybook.booking_id);
+      formData.append("fname", this.fname);
+      formData.append("lname", this.lname);
+      formData.append("pay_date", this.date + ' ' + this.time);
+      this.image.forEach((image) => {
+          formData.append("image", image);
+        });
       
 
       // Note ***************
@@ -173,10 +182,13 @@ export default {
       // จะสังเกตุว่าใช้ myImage เป็น key เดียวกัน เลยต้องเอามา loop forEach
       // พอไปฝั่ง backend มันจะจัด file ให้เป็น Array เพื่อเอาไปใช้งานต่อได้
 
-    //   axios
-    //     .post("http://localhost:3000/blogs", formData)
-    //     .then((res) => this.$router.push({name: 'home'}))
-    //     .catch((e) => console.log(e.response.data));
+      axios
+        .post("/payment", formData)
+        .then((res) => {
+          console.log(res)
+          location.href = '/'
+        })
+        .catch((e) => console.log(e.response.data));
       }
     },
   },

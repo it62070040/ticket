@@ -65,17 +65,18 @@ UNIQUE KEY `banking_id` (`banking_id`)
 
 create table `booking` (
 `booking_id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-`booking_seat` varchar(10) not null,
+`booking_seat` varchar(20) not null,
 `booking_concert` varchar(255) not null,
 `booking_amount` int(1) not null,
 `booking_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-`status` boolean not null,
+`status` enum('pending', 'success', 'fail') default 'pending'  not null,
 `booking_price` int(10) not null,
 `booking_slip` varchar(255) default null,
 `user_user_id` int(20) unsigned,
 `banking_banking_id` int(20) unsigned,
 `concert_concert_id` int(20) unsigned,
 `address_id` int(20) unsigned,
+`ticType` varchar(255),
 foreign key (`user_user_id`) references `users` (`user_id`),
 foreign key (`banking_banking_id`) references `banking` (`banking_id`),
 foreign key (`concert_concert_id`) references `concerts` (`concert_id`),
@@ -103,14 +104,27 @@ CREATE TABLE `tokens` (
   CONSTRAINT `token_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 );
 create table `payments`(
+	`id` int(20) unsigned not null auto_increment,
 	`booking_id` int(20) unsigned,
     `fname` varchar(255),
     `lname` varchar(255),
     `pay_date` datetime,
-    `bank` varchar(255),
-    `image` varchar(255),
+    PRIMARY KEY (`id`),
     foreign key (`booking_id`) references `booking` (`booking_id`)
-);
+)ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+
+create table `payimages`(
+`id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `payment_id` int(20) unsigned NOT NULL,
+  `file_path` varchar(200) NOT NULL,
+  `upload_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by_id` int(11) DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  foreign key (`payment_id`) references `payments` (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+
 
 insert into `location` (`address_id`, `address_name`, `seat`, `image`) values
 (1, 'hotel', 'A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 B1 B2 B3 B4 B5 B6 B7 B8 B9 B10 C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 D1 D2 D3 D4 D5 D6 D7 D8 D9 D10 E1 E2 E3 E4 E5 E6 E7 E8 E9 E10 F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 G1 G2 G3 G4 G5 G6 G7 G8 G9 G10 H1 H2 H3 H4 H5 H6 H7 H8 H9 H10 I1 I2 I3 I4 I5 I6 I7 I8 I9 I10 J1 J2 J3 J4 J5 J6 J7 J8 J9 J10 K1 K2 K3 K4 K5 K6 K7 K8 K9 K10 L1 L2 L3 L4 L5 L6 L7 L8 L9 L10', 'https://i.ibb.co/xmrZjf1/zone-2.png'),
@@ -124,26 +138,47 @@ INSERT INTO `users` (`user_id`, `user`, `fname`, `lname`, `address`, `phone`, `e
 ('3', 'sell', 'chanakan', 'thudhayanukul', 'กรุงเทพมหานคร', '0894039002', 'chanakan@gmail.com', 'Password1');
 
 INSERT INTO `concerts` (`concert_id`, `concert_title`, `concert_amountseat`, `concert_address`, `concert_desc`, `concert_status`, `concert_showtime`, `buy_available`, `user_user_id`, `address_id`, `price`) VALUES
-('1', 'Three man down', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'on sale now', '2000-01-01 10:00:00', '2021-03-09 05:14:41', 3, 1, 1000),
-('2', 'RRCB MBK (ROCK And ROLL Come Back MBK)', 6, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'canceled', '2000-01-01 00:11:10', '2021-03-09 05:14:41', 3, 1, 1000),
-('3', 'Dept', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'canceled', '2000-01-01 21:10:00', '2019-04-09 05:14:41', 3, 2, 1000),
-('4', '2022 FIFA World Cup Qualification (AFC)GROUP G Thailand vs. Indonesia', 2, 'ladkrabang bangkok thailand 10101', 'abcdefg', 'canceled', '1921-05-11 23:59:59', '2021-03-09 05:14:41', 3, 3, 1000);
+('1', 'Three man down', 2000, 'โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท', 'อยากฟัง Three Man Down เล่าเรื่องของพวกเขาให้เราได้รู้จักกันมากขึ้น', 'on sale now', '2021-05-20 10:00:00', '2021-03-20 10:00:00', 3, 1, 1000),
+('2', 'RRCB MBK (ROCK And ROLL Come Back MBK)', 1000, 'โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท', 'RRCB MBK (ROCK And ROLL Come Back MBK) เลื่อนวันแสดงไม่มีกำหนด สำหรับลูกค้าที่ซื้อบัตรคอนเสิร์ตไปแล้วสามารถเก็บบัตรของท่านไว้สำหรับเข้าชมการแสดงในรอบใหม่ได้', 'on sale now', '2021-06-10 00:11:10', '2021-04-20 10:00:00', 3, 1, 1000),
+('3', 'Dept', 800, 'ยูเนี่ยน ฮอลล์, ศูนย์การค้ายูเนี่ยน มอลล์', 'ทำความรู้จักกับสองหนุ่มวง Dept เบนซ์–ภวัต โอภาสสิริโชติ (ร้องนำ/กีตาร์) และ ลุค ทาวน์เซน (คีย์บอร์ด) วงดูโอ้ป๊อปน้องใหม่จากค่ายสมอลล์รูม', 'on sale now', '2021-08-01 21:10:00', '2021-04-09 10:00:00', 3, 2, 1000),
+('4', '2gether The Movie', 1000, 'โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท', 'เพราะเราคู่กัน', 'on sale now', '2021-09-22 10:00:00', '2021-04-02 10:00:00', 3, 1, 2000),
+('5', 'PHUKET SUNSET BEACH RUN', 500, 'ศูนย์วัฒนธรรมแห่งประเทศไทย หอประชุมใหญ่', 'ภูเก็ตเป็นหนึ่งในจังหวัดที่ดึงดูดนักท่องเที่ยวชาวต่างชาติมากที่สุดในประเทศไทย หนึ่งในสถานที่ท่องเที่ยวหลักของภูเก็ตคือ หาดทรายที่ทอดยาวไปตามชายฝั่งทะเลอันดามัน ซึ่งเป็นทิวทัศน์ที่หาที่ไหนไม่ได้ ', 'on sale now', '2021-07-11 16:30:00', '2021-04-08 10:00:00', 3, 3, 500),
+('6', '7เซียน คอนเสิร์ต', 500, 'ยูเนี่ยน ฮอลล์, ศูนย์การค้ายูเนี่ยน มอลล์', 'พวกเราทีมผู้จัดและศิลปิน 7 เซียนคอนเสิร์ต ขอให้แฟน ๆ ที่รอคอยการแสดงทุกคนดูแลสุขภาพของตัวเองและสุข', 'on sale now', '2021-08-26 15:30:00', '2021-05-30 10:00:00', 3, 2, 900),
+('7', 'คอนเสิร์ต 36 ปี ปั่น ไพบูลย์เกียรติ เขียวแก้ว', 200, 'บีซีซี ฮอลล์ เซ็นทรัล พลาซ่า ลาดพร้าว ชั้น 5', 'งานคอนเสิร์ต 36 ปี ปั่น ไพบูลย์เกียรติ เขียวแก้ว ย้ายสถานที่แสดงเป็น BCC Hall เซ็นทรัลลาดพร้าว (ชั้น 5) และเลื่อนการแสดง เป็นวันที่ 17 กรกฎาคม 2564 17.00 น.',
+ 'coming soon', '2021-05-19 14:00:00', '2021-03-06 10:00:00', 3, 2,800),
+('8', 'Kamikaze Party 2021', 2000, 'โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท', 'สนุกไปกับ FOUR-MOD, FFK, K-OTIC, WAII, PAYU, KNOMJEAN, MILA, SISKA, SWEE:D, 3.2.1, TIMETHAI และศิลปินเซอร์ไพร์สสุดพิเศษ !!',
+ 'coming soon', '2021-07-28 16:00:00', '2021-06-22 10:00:00', 3, 1, 1000),
+('9', 'แปลรักฉันด้วยใจเธอ เต๋ โอ้เอ๋ว Fan Meeting', 100, 'โยูเนี่ยน ฮอลล์, ศูนย์การค้ายูเนี่ยน มอลล์', 'แปลรักฉันด้วยใจเธอ เต๋ โอ้เอ๋ว Fan Meeting', 'on sale now', '2021-06-30 15:30:00', '2021-03-06 10:00:00', 3, 2, 1200),
+('10', '2020 TRINITY INVISIBLE WORLD LIVE IN BANGKOK', 1000, 'โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท', 'ประกาศเลื่อนการจัดคอนเสิร์ต 2020 TRINITY INVISIBLE WORLD LIVE IN BANGKOK : REALITY AND IMAGINATION วันเสาร์ที่ 26 ธันวาคม 2563', 'on sale now', '2021-05-20 16:30:00', '2021-03-10 10:00:00', 3, 1, 1000);
+
 
 INSERT INTO `banking` (`banking_id`, `bank_account`, `account_name`, `concert_id`, `user_id`, `fname`, `lname`) VALUES
 ('1', '3622413483', 'SCB', '1', 3, 'chanakan', 'thudhayanukul');
 
-INSERT INTO `booking` (`booking_id`, `booking_seat`, `booking_concert`, `booking_amount`, `booking_date`, `status`, `booking_price`, `booking_slip`, `user_user_id`, `banking_banking_id`, `concert_concert_id`, `address_id`) VALUES
-('1', 'A1', 'Three man down', '1', '2021-03-09 05:14:41', true, 1000, 'abc', 2, 1, 1, 1);
+INSERT INTO `booking` (`booking_id`, `booking_seat`, `booking_concert`, `booking_amount`, `booking_date`, `status`, `booking_price`, `booking_slip`, `user_user_id`, `banking_banking_id`, `concert_concert_id`, `address_id`, `ticType`) VALUES
+('1', 'A1', 'Three man down', '1', '2021-03-09 05:14:41', 'success', 1000, 'abc', 2, 1, 1, 1, 'E-TICKET');
 
 
 INSERT INTO `ticket` (`ticket_id`, `qr_code`, `booking_booking_id`) VALUES
 ('1', 'https://chart.apis.google.com/chart?cht=qr&chl=webpro&chs=500x500', 1);
 
-
-
 INSERT INTO `images` (`id`, `concert_id`, `file_path`, `upload_date`, `update_by_id`, `main`) VALUES
-('1', '1', 'uploads/1.jpg', '2021-03-16 21:03:36', NULL, '1'),
-('2', '2', 'uploads/2.jpg', '2021-03-16 21:04:27', NULL, '1'),
-('3', '3', 'uploads/3.jpg', '2021-03-16 21:51:56', NULL, '1'),
-('4', '4', 'uploads/myImage-1618695697812.jpg', '2021-03-16 21:51:56', NULL, '1');
+('1', '1', 'uploads/566627.jpg', '2021-03-16 21:03:36', NULL, '1'),
+('2', '2', 'uploads/rrcb.jpg', '2021-03-16 21:04:27', NULL, '1'),
+('3', '3', 'uploads/dept.jpg', '2021-03-16 21:51:56', NULL, '1'),
+('4', '4', 'uploads/2gether.jpg', '2021-03-16 21:51:56', NULL, '1'),
+('5', '5', 'uploads/phuket.jfif', '2021-03-16 21:51:56', NULL, '1'),
+('6', '6', 'uploads/7Sien.png', '2021-03-16 21:51:56', NULL, '1'),
+('7', '7', 'uploads/piboon.jpg', '2021-03-16 21:51:56', NULL, '1'),
+('8', '8', 'uploads/Kamikaze.webp', '2021-03-16 21:51:56', NULL, '1'),
+('9', '9', 'uploads/translatelove.jpg', '2021-03-16 21:51:56', NULL, '1'),
+('10', '10', 'uploads/2022trin.jpg', '2021-03-16 21:51:56', NULL, '1');
+
+
+INSERT INTO `payments` (`id`, `booking_id`, `fname`, `lname`, `pay_date`) VALUES
+(1, 1, 'ชนกันต์', 'ตัถยานุกูล', '2021-03-16 21:03:36');
+
+INSERT INTO `payimages` (`id`, `payment_id`, `file_path`, `upload_date`, `update_by_id`) VALUES
+('1', '1', 'uploads/1.jpg', '2021-03-16 21:03:36', NULL);
+
 

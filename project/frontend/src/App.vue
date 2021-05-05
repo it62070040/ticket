@@ -2,7 +2,7 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-light">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" >
         <img src="http://localhost:3000/uploads/logo.png" width="30" height="auto" alt="" />
       </a>
 
@@ -10,11 +10,11 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <router-link to="/">
-              <a class="nav-link" href="#">หน้าแรก</a>
+              <a class="nav-link" >หน้าแรก</a>
             </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">คอนเสิร์ต</a>
+            <a class="nav-link" >คอนเสิร์ต</a>
           </li>
         </ul>
         <router-link to="/create">
@@ -29,8 +29,8 @@
         </router-link>
         <form class="form-inline my-lg-0">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#">
+            <!-- <li class="nav-item">
+              <a class="nav-link" >
                 <span class="icon">
                   <i
                     ><img
@@ -39,9 +39,9 @@
                   /></i>
                 </span>
               </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
+            </li> -->
+            <!-- <li class="nav-item">
+              <a class="nav-link" >
                 <span class="icon">
                   <i
                     ><img
@@ -50,9 +50,9 @@
                   /></i>
                 </span>
               </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
+            </li> -->
+            <!-- <li class="nav-item">
+              <a class="nav-link" >
                 <span class="icon">
                   <i
                     ><img
@@ -61,29 +61,29 @@
                   /></i>
                 </span>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item dropdown" v-if="user && user.user == 'cus'">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{user.fname}} {{user.lname}}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">ตั๋วของฉัน</a>
-          <a class="dropdown-item" href="#">ประวัติการสั่งซื้อ</a>
+          <a class="dropdown-item" >ตั๋วของฉัน</a>
+          <a class="dropdown-item" >ประวัติการสั่งซื้อ</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">แก้ไขข้อมูลส่วนตัว</a>
-          <a class="dropdown-item" href="#" @click="logout()">ออกจากระบบ</a>
+          <a class="dropdown-item" >แก้ไขข้อมูลส่วนตัว</a>
+          <a class="dropdown-item"  @click="logout()">ออกจากระบบ</a>
         </div>
       </li>
       <li class="nav-item dropdown" v-if="user && user.user == 'sell'">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{user.fname}} {{user.lname}}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">คอนเสิร์ตของฉัน</a>
+          <a class="dropdown-item" >คอนเสิร์ตของฉัน</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">แก้ไขข้อมูลส่วนตัว</a>
+          <a class="dropdown-item" >แก้ไขข้อมูลส่วนตัว</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" @click="logout()">ออกจากระบบ</a>
+          <a class="dropdown-item"  @click="logout()">ออกจากระบบ</a>
         </div>
       </li>
             <button

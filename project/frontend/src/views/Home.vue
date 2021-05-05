@@ -244,8 +244,8 @@ function mobile(value) {
 export default {
   data() {
     return {
-      emailLogin: 'marvel@gmail.com',
-      passLogin: 'Password1',
+      emailLogin: 'chanakarn@hotmail.com',
+      passLogin: 'Customer1',
       concerts: [],
       search: '',
       images: [],

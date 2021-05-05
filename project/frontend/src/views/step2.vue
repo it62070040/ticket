@@ -197,7 +197,8 @@ export default {
       choose: [],
       countChoose: 0,
       countPrice: 0,
-      detail: []
+      detail: [],
+      mybook: {},
       
     };
   },
@@ -213,6 +214,7 @@ export default {
           this.concerts = response.data;
           this.getLocaton(response.data.concert.address_id)
           this.getBooked(response.data.concert.concert_id)
+          this.getmyBooked(this.user.user_id)
         })
         .catch((error) => {
           this.error = error.response.data.message;
@@ -257,7 +259,21 @@ export default {
           this.error = error.response.data.message;
         });
     },
+    getmyBooked(id) {
+      axios
+        .get(`/mybook/${id}`)
+        .then((response) => {
+          this.mybook = response.data
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    },
     click(id){
+      // if(this.mybook.booking_seat.length == 11){
+      //       alert('ไม่สามารถจองที่นั่งเพิ่มได้')
+      //       location.href = `/`
+      //     }
         if(this.seatStatus[id].status == 0){
             this.seatStatus.filter((a) => {
             if(a.id == id){

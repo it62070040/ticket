@@ -91,7 +91,7 @@
                 </div> 
                 <div class="card-body"> 
                   <div class="cyan"> 
-                    <div class="row"> 
+                    <!-- <div class="row"> 
                       <div class="col-6"> 
                         <img 
                           src="" 
@@ -100,11 +100,14 @@
                         /> 
                       </div> 
                       <div class="col-5 mt-1"> 
-                        <h6>xxx บาท</h6> 
+                        <h6>{{concerts.concert.price}} บาท</h6> 
                         
                       
                       </div> 
-                    </div> 
+                    </div>  -->
+                    <div class="text-center">
+                       <h6>{{concerts.concert.price}} บาท</h6> 
+                    </div>
                   </div> 
                    
                    

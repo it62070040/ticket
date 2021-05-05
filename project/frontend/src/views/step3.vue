@@ -52,8 +52,8 @@
                                         <h5>E-TICKET</h5> 
                                     </div> 
                                 </a> 
-                                <a class="btn p-0 ml-3" > 
-                                    <div class="e-ticket px-5" style="border:0.3em solid #d9d9d9; border-radius: 0.5em;" > 
+                                <a class="btn p-0 ml-3" @click="addCTicket()"> 
+                                    <div class="e-ticket px-5" style="border:0.3em solid #d9d9d9; border-radius: 0.5em;" :style="{'background-color' : statusOfbtnC ? '#d9d9d9':'white'}"> 
                                         <img src="../assets/c-tic.png" alt="" width="60vw" height="70vh" class="rounded" > 
                                         <h5>C-TICKET</h5> 
                                     </div> 
@@ -70,12 +70,12 @@
                                         <h5>MOBILE BANKING</h5> 
                                     </div> 
                                 </a> 
-                                 <a class="btn p-0 ml-3"> 
+                                 <!-- <a class="btn p-0 ml-3"> 
                                     <div class="e-ticket px-5" style="border:0.3em solid #d9d9d9; border-radius: 0.5em;"> 
                                         <img src="../assets/credit card.png" alt="" width="60vw" height="70vh" class="rounded mt-1" > 
                                         <h5>CREDIT CARD</h5> 
                                     </div> 
-                                </a> 
+                                </a>  -->
                             </div> 
                         </div> 
                   
@@ -109,9 +109,10 @@
                                                 <p class="card-text">{{detail[0].choose.toString()}}</p> 
                                                 <p class="card-text">{{detail[0].countChoose}}</p> 
                                                 <p class="card-text">{{concerts.concert.price}} บาท</p> 
-                                                <p class="card-text">{{ typeTicket}}</p> 
+                                                <p class="card-text">{{ typeTicket.toString()}}</p>
                                                 <p class="card-text">{{typePayment}}</p> 
-                                                <p class="card-text">{{detail[0].countPrice}} บาท</p> 
+                                                <p class="card-text" v-if="!statusOfbtnC">{{detail[0].countPrice}} บาท</p> 
+                                                <p class="card-text" v-if="statusOfbtnC">{{detail[0].countPrice}} (C-TICKET +เงิน 50 บาท)</p> 
                                             </div> 
                                         </div> 
                                     </div> 
@@ -140,12 +141,13 @@ export default {
     return {
       concerts: null,
       // seatArray: null,
-      booked: null,
       detail: null,
       statusOfbtn: false,
-      typeTicket: '-',
       statusOfbtn2: false, 
-        typePayment: '-' 
+      typeTicket: [],
+      statusOfbtnC: false, 
+        typePayment: '-',
+        seller: {}
     };
   },
   mounted() {
@@ -157,10 +159,8 @@ export default {
       axios
         .get(`/concerts/${id}`)
         .then((response) => {
-          // console.log(response.data)
-          this.concerts = response.data;
-          this.getLocaton(response.data.concert.address_id)
-          this.getBooked(response.data.concert.concert_id)
+          this.concerts = response.data
+          this.getSeller(response.data.concert.user_user_id)
 
         })
         .catch((error) => {
@@ -169,12 +169,26 @@ export default {
     },
      addETicket(){ 
         if(this.statusOfbtn){ 
-            this.statusOfbtn = false 
-            this.typeTicket = '-' 
+            this.statusOfbtn = false
+            this.typeTicket.splice(this.typeTicket.indexOf('E-TICKET'), 1)
         } 
-        else{ 
+        else{
             this.statusOfbtn = true 
-            this.typeTicket = 'E-TICKET' 
+            this.typeTicket.push('E-TICKET')
+        } 
+     },
+     addCTicket(){ 
+        if(this.statusOfbtnC){ 
+            console.log(this.typeTicket.indexOf('C-TICKET'))
+            this.statusOfbtnC = false 
+            this.typeTicket.splice(this.typeTicket.indexOf('C-TICKET'), 1)
+            this.detail[0].countPrice-=50
+
+        } 
+        else{
+            this.statusOfbtnC = true 
+            this.typeTicket.push('C-TICKET')
+            this.detail[0].countPrice+=50
         } 
      },
      addEPayment(){ 
@@ -187,12 +201,48 @@ export default {
             this.typePayment = 'MOBILE BANKING' 
         } 
      },
+     convert(array){
+         let str = array.toString()
+         for (let index = 0; index < str.length; index++) {
+             str = str.replace(',', ' ')
+         }
+         return str
+     },
+     getSeller(id){
+        axios
+        .get(`/seller/${id}`)
+        .then((response) => {
+          this.seller = response.data
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    },
      confirm(){
          if(this.typePayment == '-' || this.typeTicket == '-'){
              alert('กรุณาเลือกชนิดบัตร และ วิธีชำระเงิน')
          }
-         else if(this.typePayment == "MOBILE BANKING"){
-             location.href = `http://localhost:8080/step4/${this.concerts.concert.concert_id}`
+         else if(this.typePayment == "MOBILE BANKING" ){
+             let data = {
+          booking_seat: this.convert(this.detail[0].choose),
+          booking_concert: this.concerts.concert.concert_title,
+          booking_amount: this.detail[0].countChoose,
+          booking_price: this.detail[0].countPrice,
+          user_user_id: this.user.user_id,
+          banking_banking_id: this.seller.banking_id,
+          concert_concert_id: this.concerts.concert.concert_id,
+          address_id: this.concerts.concert.address_id,
+          ticType: this.convert(this.typeTicket)
+        };
+             axios
+        .post(`/addbooking`, data)
+        .then((res) => {
+            alert(res.data)
+          location.href = `http://localhost:8080/step4/${this.concerts.concert.concert_id}`
+        })
+        .catch((error) => {
+            console.log(error)
+        });
          }
      },
   }

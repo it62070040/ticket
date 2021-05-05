@@ -30,6 +30,7 @@ async function emailValidator(value, helpers) {
     }
 }
 
+
 const singupschema = Joi.object({
     email: Joi.string().required().email().external(emailValidator),
     mobile: Joi.string().required().pattern(/0[0-9]{9}/),
