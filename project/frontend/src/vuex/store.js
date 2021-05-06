@@ -8,11 +8,9 @@ Vue.use(Vuex)
 // the app starts up
 const state = {
   // TODO: Set up our initial state
-  col1: false,
+  col1: true,
   col2: false,
   col3: false,
-
-  
 }
 
 // Create an object storing various mutations. We will write the mutation

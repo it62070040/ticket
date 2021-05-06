@@ -153,29 +153,19 @@
     <!-- show image -->
       <div v-if="currentImage.length > 0" class="columns is-multiline">
         <div v-for="(image) in currentImage" :key="image.id" class="column is-one-quarter">
-          <div class="card">
+          <div class="card" style="border-style: hidden;">
             <div class="card-image">
-              <figure class="image is-4by3">
-                <img :src="'http://localhost:3000/'+image.file_path" alt="Placeholder image" />
-              </figure>
-            </div>
-            <footer class="card-footer">
-              <a
-                @click="deleteCurrentImage(image.id)"
-                class="card-footer-item has-text-danger"
-              >Delete</a>
-              <span @click="selectMainId = image.id" class="icon card-footer-item">
-                <i v-if="selectMainId === image.id" class="fas fa-star mt-5"></i>
-                <i v-else class="far fa-star mt-5"></i>
-              </span>
-            </footer>
+              <div class="text-center" id="card-img-top">
+                <img :src="'http://localhost:3000/'+image.file_path" alt="Placeholder image" class="w-25"/>
+              </div>
+            </div>       
+           <button @click="deleteCurrentImage(image.id)" class="btn btn-secondary" style="cursor: pointer; ">ยกเลิกการเลือก</button>
           </div>
         </div>
       </div>
-
-      <div class="text-center">
-            <button type="submit" style="width: 300px" class="btn btn-warning btn-lg mr-4" @click="submitCon">Submit</button>
-            <button type="submit" style="width: 300px" class="btn btn-dark btn-lg" @click="$router.go(-1)">Cancel</button>
+      <div class="text-center mt-2">
+            <button type="submit" class="btn btn-warning btn-lg mr-4" @click="submitCon">Submit</button>
+            <button type="submit" class="btn btn-dark btn-lg" @click="$router.go(-1)">Cancel</button>
       </div>
     </section>
   </div> 
@@ -233,13 +223,11 @@ export default {
       seatPrice: "",
       bankAccount: "",
       bankName: "",
-      // buyAvailable: null,
+      buyAvailable: null,
       showtimeCon: null,
       statusCon: "coming soon",
       location: null,
       currentImage: []
-
-
     };
   },
   mounted(){
@@ -380,7 +368,7 @@ export default {
         .put(`/concerts/${this.concert.concert.concert_id}`, formData)
         .then((res) => {
           console.log(res)
-          // location.href = `http://localhost:8080/myconcert/${this.user.user_id}`
+          location.href = `http://localhost:8080/myconcert/${this.user.user_id}`
         })
         .catch((e) => console.log(e.response.data));
       }

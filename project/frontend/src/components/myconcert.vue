@@ -51,7 +51,7 @@
                             <th scope="col">ชื่อการแสดง</th>
                             <th scope="col">ราคา</th>
                             <th scope="col">ที่นั่งทั้งหมด</th>
-                            <th scope="col">ยอดขาย (ที่นั้ง)</th>
+                            <th scope="col">ยอดขาย <br> (ที่นั้ง)</th>
                             <th scope="col">สถานะ</th>
                             <th scope="col">การดำเนินการ</th>
                         </tr>
@@ -68,11 +68,11 @@
                                  </div>
                                </div>                                       
                             </td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.amount}}</td>
-                            <td>{{item.sold}}</td>
-                            <td>{{item.concert_status}}</td>
-                            <td><button class="btn btn-secondary btn-sm" style="border-radius: 2.5em;" >แก้ไข</button></td>
+                            <td class="text-center">{{item.price}}</td>
+                            <td class="text-center">{{item.amount}}</td>
+                            <td class="text-center">{{item.sold}}</td>
+                            <td class="text-center">{{item.concert_status}}</td>
+                            <td class="text-center"><button class="btn btn-secondary btn-sm" style="border-radius: 2.5em;" @click="editCon(item.concert_id)">แก้ไข</button></td>
                         </tr>
                         
                     </tbody>
@@ -104,28 +104,29 @@
                             <td class="text-center" >{{item.name}}</td>
                             <td class="text-center" >{{item.booking_price}} บาท </td>
                             <td class="text-center" >{{ new Date(item.pay_date).toLocaleDateString("th", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} น.</td>
-                            <td class="text-center" ><button class="btn btn-warning btn-sm" style="border-radius: 2.5em;" type="button" data-toggle="modal" data-target="#modalImg" >หลักฐาน</button>
+                            <td class="text-center" ><button class="btn btn-warning btn-sm" style="border-radius: 2.5em;" type="button" @click="getImg(item.file_path)" data-toggle="modal" data-target="#modalimg">หลักฐาน</button>
                             
-            <!-- modal -->
-            <div class="modal fade" tabindex="-1" id="modalImg" aria-hidden="true">
+
+                            <div class="modal fade" tabindex="-1" id="modalimg" aria-hidden="true">
             <div class="modal-dialog" >
                 <div class="modal-content">
-                   <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                        <img class="mx-auto img-fluid" :src="'http://localhost:3000/' + item.file_path" alt="" style="">
+                    <div class="modal-body ">
+                        <img class="mx-auto img-fluid" :src="'http://localhost:3000/' + payImg" alt="logo" style="display: block;">
                     </div>
                 </div>
             </div>
         </div>
+
+
                             </td>
                           
                             <td class="text-center">
-                              <button type="button" class="btn btn-success mr-2 " style="border-radius: 2.5em;">Success</button>
-                              <button type="button" class="btn btn-danger" style="border-radius: 2.5em;">Fail</button>
+                              <button type="button" class="btn btn-success mr-2 " style="border-radius: 2.5em;" @click="changeStatusOrder('success', item.booking_id)">Success</button>
+                              <button type="button" class="btn btn-danger" style="border-radius: 2.5em;" @click="changeStatusOrder('fail', item.booking_id)">Fail</button>
+                            </td>
+
+                            <td class="text-center" v-if="lastStatus.length > 0">
+                              xxx
                             </td>
                         </tr>
                         
@@ -262,12 +263,6 @@
         
       </form>
     </div>
-
-  
-
-
-
-
       </div>
 
  
@@ -323,11 +318,13 @@ export default {
             newPassword: '',
             confirmNewpassword: '',
             imageOfCus: '',
-            myConcert: 'false',
-            checkOrder: 'true',
+            myConcert: 'true',
+            checkOrder: 'false',
             editProfile: 'false',
             concerts: {}, 
             myOrders:{},
+            payImg: null,
+            lastStatus: '',
             
         };
     },
@@ -430,51 +427,35 @@ export default {
             localStorage.clear()
             location.reload();
         },
-      submitBlog() {
-      this.$v.$touch();
-      if(!this.$v.$invalid){
-        let formData = new FormData();
-      formData.append("", this.firstName);
-      formData.append("", this.lastName);
-      formData.append("", this.address);
-      formData.append("", this.mobile);
-      
-      if(this.password){
-        formData.append("", this.password);
+    getImg(file_path){
+      this.payImg = file_path
+    },
+    changeStatusOrder(status, id){
+      let data = {
+        status
       }
-      if(this.newPassword){
-        formData.append("", this.newPassword);
-      }
-      if(this.confirmNewpassword){
-        formData.append("", this.confirmNewpassword);
-      }
-     
-      // Note ***************
-      // ตอนเรายิง Postmant จะใช้ fromData
-      // ตอนยิงหลาย ๆ รูปพร้อมกันใน Postman จะเป็นแบบนี้
-
-      // title   | "This is a title of blog"
-      // comment | "comment in blog"
-      // ...
-      // myImage | [select file 1]
-      // myImage | [select file 2]
-      // myImage | [select file 3]
-
-      // จะสังเกตุว่าใช้ myImage เป็น key เดียวกัน เลยต้องเอามา loop forEach
-      // พอไปฝั่ง backend มันจะจัด file ให้เป็น Array เพื่อเอาไปใช้งานต่อได้
-
-
-    //   axios
-    //     .post("/", formData)
-    //     .then((res) => this.$router.push({name: 'home'}))
-    //     .catch((e) => console.log(e.response.data));
+      var r = confirm("Are you sure for " + status);
+      if (r == true) {
+        axios
+        .put(`/changestatus/${id}`, data)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((e) => {
+          console.log(e)
+        });
+      } else {
+        console.log('cancel')
       }
     },
     // isConcertOwner(concert){
     //     if (!this.user) return false
     //    return concert.user_user_id === this.user.id
     // }
-
-  }
+    editCon(id){
+      location.href = `http://localhost:8080/update/${id}`
+    },
+  },
+  
 }
 </script>

@@ -101,7 +101,7 @@ export default {
         .then((response) => {
           this.concerts = response.data
           console.log(response.data.concert.user_user_id)
-          this.getSeller(response.data.concert.user_user_id)
+          this.getSeller(response.data.concert.concert_id)
         })
         .catch((error) => {
           this.error = error.response.data.message;

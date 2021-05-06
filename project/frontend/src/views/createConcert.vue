@@ -123,7 +123,7 @@
 
       <div class="form-group was-validated">
         <label >สถานที่จัด</label>
-        <select id="location" class="form-control" style="cursor: pointer;" required >
+        <select id="location" class="form-control" style="cursor: pointer;" required v-model="location" @click="getlocationname()">
           <option selected></option>
           <option value="1">โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท</option>
           <option value="2">ยูเนี่ยน ฮอลล์, ศูนย์การค้ายูเนี่ยน มอลล์</option>
@@ -138,21 +138,24 @@
         <div class="custom-file position-relative">
           <input class="custom-file-input" type="file" accept="image/png, image/jpeg, image/webp" @change="selectImages" style="cursor: pointer;" required/>  
           <label class="custom-file-label" for="customFile">กรุณาเลือกรูปภาพของคุณ</label>
-          <!-- show error -->
+
+          
           <div class="invalid-feedback">กรุณาอัพโหลดรูปภาพ</div>
-          <div v-if="images" class="row mx-auto pt-3">
-            <div v-for="(image, index) in images" :key="image.id" class="col-3">
-              <div class="card" style="position:relative; border-style: hidden;">
-                <div id="card-img-top" style="height: 150px; width: auto; background-position: center;">
-                    <img :src="showSelectImage(image)" alt="Placeholder image" />
-                </div>
-                <footer class="card-footer">
-                  <a @click="deleteSelectImage(index)" class="card-footer-item has-text-danger" style="cursor: pointer;">Delete</a>
-                </footer>
+          <div v-if="images" class="columns is-multiline">
+        <div v-for="(image, index) in images" :key="image.id" class="column is-one-quarter">
+          <div class="card" style="border-style: hidden;">
+            <div class="card-image">
+              <div class="text-center" id="card-img-top">
+                <img :src="showSelectImage(image)" alt="Placeholder image" class="w-25"/>
               </div>
-            </div>
+            </div>       
+           <button @click="deleteSelectImage(index)" class="btn btn-secondary" style="cursor: pointer; ">ยกเลิกการเลือก</button>
           </div>
         </div>
+        </div>
+
+        </div>
+
       </div>
 
       <div class="text-center">
@@ -164,7 +167,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/plugins/axios";
 import {
   required,
   minLength,
@@ -209,6 +212,7 @@ function buy_avail (){
 
 
 export default {
+  props: ["user"],
   data() {
     return {
       concert: {},
@@ -216,13 +220,14 @@ export default {
       images: [], // array of image
       titleCon: "",
       desConcert: "",
-      locationCon: "",
       seatPrice: "",
       bankAccount: "",
       bankName: "",
-      // buyAvailable: null,
+      buyAvailable: null,
       showtimeCon: null,
       statusCon: "coming soon",
+      location_name: '',
+      location: null,
     };
   },
   validations: {
@@ -256,6 +261,17 @@ export default {
   },
 
   methods: {
+    getlocationname(){
+        if(this.location == 1){
+            this.location_name = 'โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท'
+          }
+          if(this.location == 2){
+            this.location_name = 'ยูเนี่ยน ฮอลล์, ศูนย์การค้ายูเนี่ยน มอลล์'
+          }
+          if(this.location == 3){
+            this.location_name = 'ศูนย์วัฒนธรรมแห่งประเทศไทย หอประชุมใหญ่'
+          }
+      },
     selectImages(event) {
       this.images = event.target.files;
     },
@@ -269,41 +285,30 @@ export default {
       this.images.splice(index, 1);
     },
     submitCon() {
-      this.locationCon = document.getElementById("location").value;
-      console.log(this.locationCon)
       this.$v.$touch();
       if(!this.$v.$invalid){
         let formData = new FormData();
         formData.append("concert_title", this.titleCon);
         formData.append("concert_desc", this.desConcert);
-        formData.append("concert_address", this.locationCon);
+        formData.append("address_id", this.location);
+        formData.append("concert_address", this.location_name);
+        formData.append("price", this.seatPrice);
         formData.append("concert_showtime", this.showtimeCon);
-        // formData.append("concert_address", this.priceCon);
-        formData.append("concert_seatPrice", this.seatPrice);
         formData.append("buy_available", this.buyAvailable);
-        // formData.append("pinned", this.pinnedBlog ? 1 : 0);
-        formData.append("concert_status", "coming soon");
+        formData.append("user_user_id", this.user.user_id);
+
+        formData.append("bank_account", this.bankAccount);
+        formData.append("account_name", this.bankName);
+        formData.append("fname", this.user.fname);
+        formData.append("lname", this.user.lname);
+
         this.images.forEach((image) => {
           formData.append("myImage", image);
         });
 
-      // Note ***************
-      // ตอนเรายิง Postmant จะใช้ fromData
-      // ตอนยิงหลาย ๆ รูปพร้อมกันใน Postman จะเป็นแบบนี้
-
-      // title   | "This is a title of blog"
-      // comment | "comment in blog"
-      // ...
-      // myImage | [select file 1]
-      // myImage | [select file 2]
-      // myImage | [select file 3]
-
-      // จะสังเกตุว่าใช้ myImage เป็น key เดียวกัน เลยต้องเอามา loop forEach
-      // พอไปฝั่ง backend มันจะจัด file ให้เป็น Array เพื่อเอาไปใช้งานต่อได้
-
     axios
-        .post("http://localhost:3000/concerts", formData)
-        .then(() => this.$router.push({name: 'home'}))
+        .post("/concerts", formData)
+        .then(() => location.href = '/')
         .catch((e) => console.log(e.response.data));
       }
     },

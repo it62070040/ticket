@@ -166,21 +166,6 @@ export default {
       this.image.forEach((image) => {
           formData.append("image", image);
         });
-      
-
-      // Note ***************
-      // ตอนเรายิง Postmant จะใช้ fromData
-      // ตอนยิงหลาย ๆ รูปพร้อมกันใน Postman จะเป็นแบบนี้
-
-      // title   | "This is a title of blog"
-      // comment | "comment in blog"
-      // ...
-      // myImage | [select file 1]
-      // myImage | [select file 2]
-      // myImage | [select file 3]
-
-      // จะสังเกตุว่าใช้ myImage เป็น key เดียวกัน เลยต้องเอามา loop forEach
-      // พอไปฝั่ง backend มันจะจัด file ให้เป็น Array เพื่อเอาไปใช้งานต่อได้
 
       axios
         .post("/payment", formData)

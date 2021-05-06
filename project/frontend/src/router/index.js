@@ -75,6 +75,11 @@ const routes = [
     name: 'myconcert',
     meta: {login: true},
     component: ()  => import('../components/myconcert.vue')
+  },
+  {
+    path:'/paymentimg/:id',
+    name: 'paymentimg',
+    component: () => import("../views/paymentimg.vue")
   }
 
 ]

@@ -3,31 +3,11 @@
     <div class="pl-3 pt-2" v-show="store.state.col1">
       <h3 class="text-center pb-4">ตั๋วของฉัน</h3>
       <div class="row">
-        <div
-          class="col-lg-3 col-md-4 col-sm-5 pb-4"
-          v-for="(order, index) in orders"
-          :key="order.booking_id"
-        >
-          <div
-            v-if="order.status"
-            class="card"
-            style="background-color: #f4f4f4; float: left"
-          >
-            <img
-              class="card-img-top"
-              :src="'http://localhost:3000/' + order.file_path"
-              alt="Card image cap"
-            />
+        <div class="col-lg-3 col-md-4 col-sm-5 pb-4" v-for="(order, index) in orders" :key="order.booking_id">
+          <div v-if="order.status == 'success'" class="card" style="background-color: #f4f4f4; float: left">
+            <img class="card-img-top" :src="'http://localhost:3000/' + order.file_path" alt="Card image cap"/>
             <div class="card-body">
-              <p
-                style="
-                  overflow: hidden;
-                  font-weight: 1000;
-                  height: 45px;
-                  font-size: 16px;
-                "
-                class="card-title"
-              >
+              <p style="overflow: hidden; font-weight: 1000; height: 45px; font-size: 16px;" class="card-title">
                 {{ order.concert_title }}
               </p>
               <p class="card-text">
@@ -36,17 +16,11 @@
                 <strong>ราคา : </strong>{{ order.booking_price }}<br />
               </p>
               <center>
-                <button
-                  class="btn btn-primary"
-                  data-toggle="modal"
-                  data-target="#e_ticket"
-                  @click="eTicket(index)"
-                >
-                  E-TICKET
-                </button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#e_ticket" @click="eTicket(index)">E-TICKET</button>
               </center>
             </div>
           </div>
+          <p v-if="order.status == 'pending'"> รอตรวจสอบการโอนเงิน </p>
         </div>
       </div>
     </div>
@@ -98,10 +72,15 @@
             <td>{{ order.booking_amount }}</td>
             <td>{{ order.booking_price }}</td>
             <td>{{ order.booking_price }}</td>
-            <td style="color: lawngreen; font-weight: 1000" v-if="order.status">
-              Confirm
+            <td style="color: lawngreen; font-weight: 1000" v-if="order.status == 'success'">
+              {{order.status}}
             </td>
-            <td v-if="!order.status">Pending</td>
+            <td style="color: gray; font-weight: 1000" v-if="order.status == 'pending'">
+              {{order.status}}
+            </td>
+            <td style="color: red; font-weight: 1000" v-if="order.status == 'fail'">
+              {{order.status}}
+            </td>
           </tr>
         </tbody>
       </table>

@@ -25,7 +25,8 @@
                 <div class="form-group col-6 mt-2">     
                     <select class="form-control" aria-label="Default select example" v-model="valueshow"> 
                         <option selected disabled>เลือกรอบการแสดง</option> 
-                        <option :value="showtime">{{new Date(concerts.concert.concert_showtime).toLocaleDateString("th", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) }}</option> 
+                        <option :value="showtime">{{ new Date(concerts.concert.concert_showtime).toLocaleDateString("th", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} น.</option> 
+                        
                         <!-- <option :value="endtime">{{concerts.concert.concert_endtime}}</option>  -->
                     </select> 
                  

@@ -73,15 +73,20 @@
             </router-link>
             <div :to="`/detail/${concert.concert_id}`" class="card-body" style="min-height:200px; padding: 0.5rem;">
               <router-link  :to="`/detail/${concert.concert_id}`">
-                  <p class="card-title pt-2" >{{ concert.concert_title }}</p>
-                  <p class="card-text" style="height:10px; font-weight: 500;" >{{concert.concert_showtime.substring(0, 10)}}</p>
+                  <p class="card-title pt-2 text-center" >{{ concert.concert_title }}</p>
+                  <p class="card-text text-center" style="height:10px; font-weight: 500;" >
+                    {{concert.concert_showtime.substring(0, 10)}}
+                    <!-- {{new Date(concert.concert_showtime).toLocaleDateString("th", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) }} -->
+                    </p>
                   <!-- <p class="card-text" >{{findDate}}</p> -->
-                  <p class="card-text" style="height:20px; font-weight: 500;">
-                    {{ concert.address_name}}
+                  <p class="card-text mt-4" style="height:20px; font-weight: 500;">
+                    {{ concert.concert_address}}
                   </p><br>
                 </router-link>
               <div class="text-center" >
-                <router-link  class="btn btn-outline-danger" :to="`/step1/${concert.concert_id}`">ซื้อบัตร</router-link>
+                <router-link v-if="user.user == 'cus'"  class="btn btn-outline-danger" :to="`/step1/${concert.concert_id}`">ซื้อบัตร</router-link>
+                <router-link v-if="user.user == 'sell' && user.user_id == concert.user_user_id"  class="btn btn-outline-danger" :to="`/update/${concert.concert_id}`">แก้ไข</router-link>
+
               </div>
             </div>
           </div>
@@ -242,6 +247,7 @@ function mobile(value) {
   return !!value.match(/0[0-9]{9}/);
 }
 export default {
+  props: ["user"],
   data() {
     return {
       emailLogin: 'chanakarn@hotmail.com',
