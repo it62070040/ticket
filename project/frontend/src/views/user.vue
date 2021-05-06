@@ -50,7 +50,7 @@ export default {
     };
   },
   mounted() {
-    this.getUser(this.user.user_id);
+    this.getUser(this.$route.params.id);
   },
   components: {
     myticket,
@@ -58,7 +58,7 @@ export default {
   methods: {
     getUser(userID){
       axios
-        .get(`/user/${userID}`)
+        .get(`http://localhost:3000/user/${userID}`)
         .then((response) => {
           this.user = response.data;
 
