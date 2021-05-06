@@ -389,7 +389,11 @@ export default {
         .then((res) => {
           this.users = res.data;
           // console.log(res.data)
-          this.id = res.data.user_id;
+          this.id = res.data.user_id
+          this.fname = res.data.fname
+          this.lname = res.data.lname
+          this.phone = res.data.phone
+          this.address = res.data.address
 
         })
         .catch((err) => {
