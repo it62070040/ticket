@@ -106,7 +106,7 @@
                                 <input type="email" class="form-control mt-5" id="" aria-describedby="emailHelp" placeholder="อีเมล" v-model="emailLogin">
                                 <input type="password" class="form-control mt-3" id="" placeholder="รหัสผ่าน" v-model="passLogin">
                             </div>
-                            <a href="#" class="btn mx-auto text-muted" style=" display: block;">ลืมรหัสผ่าน</a>
+                            <!-- <a href="#" class="btn mx-auto text-muted" style=" display: block;">ลืมรหัสผ่าน</a> -->
                            
                             <hr class="my-0 pb-3">
                             <button @click="login()"  class="btn btn-danger mx-auto" style="display: block;">เข้าสู่ระบบ</button>

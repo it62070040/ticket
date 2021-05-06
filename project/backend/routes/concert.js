@@ -246,7 +246,7 @@ router.post("/addbooking", async function (req, res, next) {
   try{
     await addbook.validateAsync(req.body, {abortEarly: false})
  }catch(error){
-     return res.json(error.details.message)
+     return res.status(400).json(error.details.message)
  }
   
   const conn = await pool.getConnection()

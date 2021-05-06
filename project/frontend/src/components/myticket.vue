@@ -2,8 +2,23 @@
   <div class="col-9">
     <div class="pl-3 pt-2" v-show="store.state.col1">
       <h3 class="text-center pb-4">ตั๋วของฉัน</h3>
-      <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-5 pb-4" v-for="(order, index) in orders" :key="order.booking_id">
+      <!-- <div class="row"  > -->
+         <!-- ตาราง -->
+          <table class="table mt-4" >
+                    <thead class="thead-light">
+                        <tr class="text-center">
+                            <th scope="col">ลำดับ</th>
+                            <th scope="col">E-TICKET</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr v-for="(order, index) in orders" :key="order.booking_id">
+                          <td class="text-center">{{index+1}}</td>
+                          <td class="text-center" v-if="order.status == 'pending'">รอตรวจสอบการโอนเงิน</td>
+                          <td class="text-center" v-if="order.status == 'fail'">ไม่ผ่านการตรวจสอบ</td>
+                           <td class="" style="width: 30vw;" v-if="order.status == 'success'"> 
+                                <!-- modal   -->
+         <div class="col-lg-8 col-md-4 col-sm-5 pb-4">
           <div v-if="order.status == 'success'" class="card" style="background-color: #f4f4f4; float: left">
             <img class="card-img-top" :src="'http://localhost:3000/' + order.file_path" alt="Card image cap"/>
             <div class="card-body">
@@ -16,13 +31,18 @@
                 <strong>ราคา : </strong>{{ order.booking_price }}<br />
               </p>
               <center>
-                <button class="btn btn-primary" data-toggle="modal" data-target="#e_ticket" @click="eTicket(index)">E-TICKET</button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#e_ticket" @click="eTicket(index, order.booking_concert)">E-TICKET</button>
               </center>
             </div>
           </div>
-          <p v-if="order.status == 'pending'"> รอตรวจสอบการโอนเงิน </p>
         </div>
-      </div>
+                            </td>
+                        </tr>
+                  </tbody>
+                  
+          </table> 
+        
+      <!-- </div> -->
     </div>
 
     <div class="pt-2" v-show="store.state.col2">
@@ -295,7 +315,7 @@
                 </div>
                 <img
                   class="card-img-bottom"
-                  src="../assets/qr1.png"
+                  :src="qrcode"
                   style="max-height: 232px; width: auto"
                   alt="Card image cap"
                 />
@@ -343,6 +363,8 @@ export default {
       confirmpassword: "",
       id: "",
       zone: "A",
+      qrcode: null,
+     
     };
   },
   mounted() {
@@ -350,7 +372,7 @@ export default {
     this.getUserOrder(this.$route.params.id);
   },
   methods: {
-    
+  
     editUser() {
       
       if (!this.$v.$invalid) {
@@ -412,9 +434,9 @@ export default {
           console.log(err);
         });
     },
-    eTicket(id) {
+    eTicket(id, name) {
       this.ticket = this.orders[id];
-
+      this.qrcode = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${name}`
       console.log(this.orders[id]);
     },
   },

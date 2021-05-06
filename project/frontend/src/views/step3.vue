@@ -160,7 +160,7 @@ export default {
         .get(`/concerts/${id}`)
         .then((response) => {
           this.concerts = response.data
-          this.getSeller(response.data.concert.user_user_id)
+          this.getSeller(response.data.concert.concert_id)
 
         })
         .catch((error) => {
@@ -237,7 +237,7 @@ export default {
              axios
         .post(`/addbooking`, data)
         .then((res) => {
-            alert(res.data)
+            console.log(res.data)
           location.href = `http://localhost:8080/step4/${this.concerts.concert.concert_id}`
         })
         .catch((error) => {
