@@ -13,9 +13,6 @@
               <a class="nav-link" >หน้าแรก</a>
             </router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" >คอนเสิร์ต</a>
-          </li>
         </ul>
         <router-link to="/create">
           <button
@@ -150,3 +147,10 @@ export default {
   },
 };
 </script>
+<style>
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+
+</style>

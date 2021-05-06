@@ -11,9 +11,7 @@
                                 <a class="nav-link" href="#">หน้าแรก</a>
                                 </router-link>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">คอนเสิร์ต</a>
-                            </li>
+                            
 
                         </ul>
                         <router-link to="/create">
