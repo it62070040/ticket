@@ -136,7 +136,7 @@
           <label class="custom-file-label" for="customFile">กรุณาเลือกรูปภาพของคุณ</label>
           <!-- show error -->
           <div class="invalid-feedback">กรุณาอัพโหลดรูปภาพ</div>
-          <div v-if="images" class="row mx-auto pt-3">
+          <!-- <div v-if="images" class="row mx-auto pt-3">
             <div v-for="(image, index) in images" :key="image.id" class="col-3">
               <div class="card" style="position:relative; border-style: hidden;">
                 <div id="card-img-top" style="height: 150px; width: auto; background-position: center;">
@@ -147,9 +147,25 @@
                 </footer>
               </div>
             </div>
+          </div> -->
+
+          <div v-if="images" class="columns is-multiline">
+        <div v-for="(image, index) in images" :key="image.id" class="column is-one-quarter">
+          <div class="card" style="border-style: hidden;">
+            <div class="card-image">
+              <div class="text-center" id="card-img-top">
+                <img :src="showSelectImage(image)" alt="Placeholder image" class="w-25"/>
+              </div>
+            </div>       
+           <button @click="deleteSelectImage(index)" class="btn btn-secondary" style="cursor: pointer; ">ยกเลิกการเลือก</button>
           </div>
         </div>
       </div>
+
+
+        </div>
+      </div>
+      
     <!-- show image -->
       <div v-if="currentImage.length > 0" class="columns is-multiline">
         <div v-for="(image) in currentImage" :key="image.id" class="column is-one-quarter">
@@ -336,6 +352,7 @@ export default {
           .catch((e) => {
             console.log(e);
           });
+      location.reload();
       }
     },
     submitCon() {

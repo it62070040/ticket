@@ -100,7 +100,7 @@ router.put("/edit", async function (req, res, next) {
     try{
       const [users] = await conn.query(
         'SELECT * FROM users WHERE user_id=?', [id] )
-        
+
       const user = users[0]
         if (!(await bcrypt.compare(oldpassword, user.password))) {
           throw new Error('Incorrect old password')
@@ -213,7 +213,7 @@ router.get("/checkOrder/:id", async function (req, res, next) {
   await conn.beginTransaction()
 
   try {
-    let [rows,fields] = await conn.query("select b.booking_id, b.booking_concert, concat(p.fname,' ' ,p.lname) `name`, b.booking_price, p.pay_date, pi.file_path from booking b left outer join payments p on (b.booking_id = p.booking_id) join payimages pi on (p.id = pi.payment_id) join banking ba on (b.banking_banking_id = ba.banking_id) where ba.user_id = ?", [req.params.id]);
+    let [rows,fields] = await conn.query("select b.status,b.booking_id, b.booking_concert, concat(p.fname,' ' ,p.lname) `name`, b.booking_price, p.pay_date, pi.file_path from booking b left outer join payments p on (b.booking_id = p.booking_id) join payimages pi on (p.id = pi.payment_id) join banking ba on (b.banking_banking_id = ba.banking_id) where ba.user_id = ?", [req.params.id]);
 
 
     await conn.commit();
