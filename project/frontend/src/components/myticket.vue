@@ -309,13 +309,13 @@
 </template>
 <script>
 import store from "@/vuex/store.js";
+import axios from '@/plugins/axios';
 import {
   required,
   minLength,
   sameAs,
   maxLength,
 } from "vuelidate/lib/validators";
-import axios from "axios";
 
 function complexPassword(value) {
   if (!(value.match(/[a-z]/) && value.match(/[A-Z]/) && value.match(/[0-9]/))) {
@@ -366,7 +366,7 @@ export default {
       };
 
       axios
-        .put(`http://localhost:3000/edit`, data)
+        .put(`/edit`, data)
         .then((response) => {
           console.log(response);
           alert("แก้ไขข้อมูลสำเร็จ");
@@ -385,7 +385,7 @@ export default {
     },
     getUser(userID) {
       axios
-        .get(`http://localhost:3000/user/${userID}`)
+        .get(`/user/${userID}`)
         .then((res) => {
           this.users = res.data;
           // console.log(res.data)
@@ -402,7 +402,7 @@ export default {
     },
     getUserOrder(id) {
       axios
-        .get(`http://localhost:3000/UserBooked/${id}`)
+        .get(`/UserBooked/${id}`)
         .then((res) => {
           this.orders = res.data;
           console.log(res.data);

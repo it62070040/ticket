@@ -8,7 +8,7 @@
       >
         <div class="profile">
           <div class="mb-3 pt-3 pb-2 text-center " style="background-color: #f4f4f4; width: 13em;">
-            <b >ชื่อ นามสกุล</b> <br> อีเมล 
+            <b >{{user.fname +' ' + user.lname}}</b> <br> {{user.email}}
             <!-- <p > อีเมล</p> -->
           </div>
           
@@ -144,7 +144,7 @@
 
 
 
-      
+      <!--  -->
       <!-- แก้ไขข้อมูลส่วนตัว -->
       <div class="container" v-if="editProfile == 'true'">
       <h3 class="text-center pb-4">แก้ไขข้อมูลส่วนตัว</h3>
@@ -259,9 +259,11 @@
             </template>
           </div>
         </div>
-        <center><button type="submit" class="btn btn-danger" @click="submit()">บันทึก</button></center>
         
       </form>
+      
+        <center><button class="btn btn-danger" @click="editUser()">บันทึก</button></center>
+
     </div>
       </div>
 
@@ -330,12 +332,11 @@ export default {
     },
     mounted () {
       this.getMycon(this.user.user_id)
-    // this.myConcert = localStorage.getItem("myConcert")
-    // this.checkOrder = localStorage.getItem("checkOrder")
-    // this.editProfile = localStorage.getItem("editProfile")
-    // localStorage.removeItem("myConcert")
-    // localStorage.removeItem("checkOrder")
-    // localStorage.removeItem("editProfile")
+      this.firstName = this.user.fname
+      this.lastName = this.user.lname
+      this.address = this.user.address
+      this.mobile = this.user.phone
+      
      
   },
     validations:{
@@ -366,11 +367,40 @@ export default {
         complex: complexPassword,
     },
     confirmNewpassword:{
-        sameAs: sameAs("password"),
+        sameAs: sameAs("newPassword"),
     }
     
   },
   methods:{
+    editUser() {
+      
+      if (!this.$v.$invalid) {
+      let data = {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        address: this.address,
+        mobile: this.mobile,
+        password: this.newPassword,
+        confirmpassword: this.confirmNewpassword,
+        oldpassword: this.password,
+        id: this.user.user_id,
+      };
+      console.log(data)
+      axios
+        .put(`/edit`, data)
+        .then((response) => {
+          console.log(response);
+          alert("แก้ไขข้อมูลสำเร็จ");
+        })
+        .catch((error) => {
+          alert("You have wrong password!");
+          console.log(error.response.data);
+        });
+      }
+      else{
+        alert('ข้อมูลผิดพลาด กรุณากรอกข้อมูลใหม่');
+      }
+    },
       getMycon(id){
           axios
         .get(`/mycon/${id}`)

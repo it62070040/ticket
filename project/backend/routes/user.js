@@ -82,7 +82,7 @@ router.put("/edit", async function (req, res, next) {
     try {
       await singupschema.validateAsync(req.body, {abortEarly: false})
   } catch (err) {
-    return res.status(400).message(error)
+    return res.status(400).json(err)
   }
       const conn = await pool.getConnection()
       await conn.beginTransaction()
@@ -94,11 +94,13 @@ router.put("/edit", async function (req, res, next) {
       const address = req.body.address
       const password = await bcrypt.hash(req.body.password, 5)
       const oldpassword = req.body.oldpassword
+      const confirmpassword = req.body.confirmpassword
 
 
     try{
       const [users] = await conn.query(
         'SELECT * FROM users WHERE user_id=?', [id] )
+        
       const user = users[0]
         if (!(await bcrypt.compare(oldpassword, user.password))) {
           throw new Error('Incorrect old password')
