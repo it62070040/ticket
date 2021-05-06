@@ -150,14 +150,13 @@
                                                     <div class="col-label col-6" style="align-self: center;">
                                                         <div class="date">{{date}}</div>
                                                     </div>
-                                                    <div class="col-btn col-6" style="text-align: -webkit-center;">
-                                                        <router-link  :to="`/step1/${concert.concert_id}`">
+                                                    <div class="col-btn col-6" style="text-align: -webkit-center;">      
                                                         <span class="btn-item ">
-                                                            <a id="but_buytic" class="btn btn-block ng-binding" onclick="" href="#">
+                                                            <a id="but_buytic" class="btn btn-block ng-binding" >
                                                             <span class="item-show">{{time}} น.</span>
                                                             <!-- <span class="item-hide">ซื้อบัตร</span> -->
                                                             </a>
-                                                        </span></router-link>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
