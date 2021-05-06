@@ -125,8 +125,8 @@
                               <button type="button" class="btn btn-danger" style="border-radius: 2.5em;" @click="changeStatusOrder('fail', item.booking_id)">Fail</button>
                             </td>
 
-                            <td class="text-center" v-if="lastStatus.length > 0">
-                              xxx
+                            <td class="text-center">
+                              {{item.status}}
                             </td>
                         </tr>
                         
@@ -261,7 +261,7 @@
         </div>
         
       </form>
-      
+
         <center><button class="btn btn-danger" @click="editUser()">บันทึก</button></center>
 
     </div>

@@ -40,19 +40,17 @@
 <script>
 import myticket from "../components/myticket";
 import store from "@/vuex/store.js";
-import axios from "axios";
+import axios from "@/plugins/axios";
 export default {
   data() {
     return {
       store,
       user: {},
       error: null,
-
-
     };
   },
   mounted() {
-    this.getUser(this.$route.params.id);
+    this.getUser(this.user.user_id);
   },
   components: {
     myticket,
@@ -60,7 +58,7 @@ export default {
   methods: {
     getUser(userID){
       axios
-        .get(`http://localhost:3000/user/${userID}`)
+        .get(`/user/${userID}`)
         .then((response) => {
           this.user = response.data;
 

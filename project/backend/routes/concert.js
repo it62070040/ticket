@@ -44,12 +44,9 @@ const addbook = Joi.object({
   ticType: Joi.string().required()
 })
 const concertOwner = async (req, res, next) => {
-  if (req.user.role === 'admin') {
-         return next()
-       }
      const [[concert]] = await pool.query('SELECT * FROM concerts WHERE concert_id=?', [req.params.id])
    
-     if (concert.user_user_id !== req.user.user_id) {
+     if (this.concert.user_user_id !== req.user.user_id) {
        return res.status(403).send('You do not have permission to perform this action')
      }
      next()
@@ -279,7 +276,7 @@ router.post("/addbooking", async function (req, res, next) {
   }  
 });
 
-router.delete('/image/:imageId', async function (req, res, next) {
+router.delete('/image/:imageId',concertOwner, async function (req, res, next) {
   const conn = await pool.getConnection();
   await conn.beginTransaction();
 
@@ -316,7 +313,7 @@ router.delete('/image/:imageId', async function (req, res, next) {
   }
 })
 
-router.put("/concerts/:id",upload.array("myImage", 5),  async function (req, res, next) {
+router.put("/concerts/:id",upload.array("myImage", 5), concertOwner,  async function (req, res, next) {
   const file = req.files;
   let pathArray = []
 

@@ -18,11 +18,6 @@ const routes = [
     meta: { login: true},
     component: user,
   },
-   // { 
-  //   path: '/seatunion', 
-  //   name: 'seatunion', 
-  //   component: seatunion, 
-  // }, 
   {
     path: '/create',
     name: 'createConcert',
@@ -38,6 +33,8 @@ const routes = [
   {
     path: '/detail/:id',
     name: 'detail',
+    meta: {login: true},
+
     component: () => import('../views/detailConcert.vue')
   },
   {
@@ -79,6 +76,8 @@ const routes = [
   {
     path:'/paymentimg/:id',
     name: 'paymentimg',
+    meta: {login: true},
+
     component: () => import("../views/paymentimg.vue")
   }
 
