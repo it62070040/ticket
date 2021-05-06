@@ -11,6 +11,8 @@ const state = {
   col1: false,
   col2: false,
   col3: false,
+
+  
 }
 
 // Create an object storing various mutations. We will write the mutation

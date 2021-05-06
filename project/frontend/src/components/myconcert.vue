@@ -17,7 +17,7 @@
               <i class="fa fa-ticket"></i>
                 คอนเสิร์ตของฉัน
             </span>
-            <span class="icon d-block pl-2" style="cursor: pointer;">
+            <span class="icon d-block pl-2" style="cursor: pointer;" @click="showCheckOrder()">
               <i class="fa fa-ticket"></i>
                 ตรวจสอบคำสั่งซื้อจากลูกค้า
             </span>
@@ -39,9 +39,9 @@
       <div class="col-7">
 
           <!-- คอนเสิร์ตของฉัน -->
-            <div class="container" v-if="myConcert == true">
+            <div class="container" v-if="myConcert == 'true'">
                 <div class="d-flex">
-                     <h5 class="mt-1">สินค้า xxx รายการ</h5>
+                     <h5 class="mt-1">สินค้า {{concerts.length}} รายการ</h5>
                     <!-- <button class="btn btn-danger ml-4 btn-sm" style="border-radius: 2.5em;">เพิ่มสินค้าใหม่</button> -->
                     <router-link  class="btn btn-danger btn-sm ml-4 mt-1" style="border-radius: 2.5em;" :to="`/create/`">เพิ่มสินค้าใหม่</router-link>
                 </div>
@@ -56,14 +56,22 @@
                             <th scope="col">การดำเนินการ</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="text-center">
-                             <td> <img src="../assets/boot.png"  alt="" height="40vh;" class="mr-2">
-                                xxx</td>
-                            <td>xxx</td>
-                            <td>xxx</td>
-                            <td>xxx</td>
-                            <td>xxx</td>
+                    <tbody >
+                        <tr v-for="item in concerts" :key="item">
+                             <td style="width: 30vw;"> 
+                               <div class="row">
+                                 <div class="col-2">
+                                    <img :src="'http://localhost:3000/' + item.file_path"  alt="" class="mr-2 container-fluid">
+                                 </div>
+                                 <div class="col">
+                                    {{item.concert_title}}
+                                 </div>
+                               </div>                                       
+                            </td>
+                            <td>{{item.price}}</td>
+                            <td>{{item.amount}}</td>
+                            <td>{{item.sold}}</td>
+                            <td>{{item.concert_status}}</td>
                             <td><button class="btn btn-secondary btn-sm" style="border-radius: 2.5em;" >แก้ไข</button></td>
                         </tr>
                         
@@ -74,9 +82,9 @@
 
 
             <!-- ตรวจสอบคำสั่งซื้อของลูกค้า -->
-            <div class="container">
+            <div class="container" v-if="checkOrder == 'true'">
                 <div class="d-flex">
-                     <h5 class="mt-1">คำสั่งซื้อ xxx รายการ</h5>
+                     <h5 class="mt-1">คำสั่งซื้อ {{myOrders.length}} รายการ</h5>
                  
                 </div>
                 <table class="table mt-4"  style="width:55  vw">
@@ -86,32 +94,58 @@
                             <th scope="col">ชื่อ-นามสกุล <br> (ลูกค้า)</th>
                             <th scope="col">จำนวนเงิน</th>
                             <th scope="col">วันเวลา <br> ที่ทำรายการ</th>
-                            <th scope="col">ธนาคาร</th>
                             <th scope="col">หลักฐาน <br> การโอนเงิน</th>
                             <th scope="col">การดำเนินการ</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="text-center">
-                            <td> <img src="../assets/boot.png"  alt="" height="40vh;" class="mr-2">
-                                xxx</td>
-                            <td>xxx</td>
-                            <td>xxx</td>
-                            <td>xxx</td>
-                            <td>xxx</td>
-                            <td><button class="btn btn-warning btn-sm" style="border-radius: 2.5em;" @click="showImage()">หลักฐาน</button></td>
-                            <td><button class="btn btn-secondary btn-sm" style="border-radius: 2.5em;" >แก้ไข</button></td>
+                        <tr v-for="item in myOrders" :key="item">
+                            <td class="text-center" > {{item.booking_concert}}</td>
+                            <td class="text-center" >{{item.name}}</td>
+                            <td class="text-center" >{{item.booking_price}} บาท </td>
+                            <td class="text-center" >{{ new Date(item.pay_date).toLocaleDateString("th", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} น.</td>
+                            <td class="text-center" ><button class="btn btn-warning btn-sm" style="border-radius: 2.5em;" type="button" data-toggle="modal" data-target="#modalImg" >หลักฐาน</button>
+                            
+            <!-- modal -->
+            <div class="modal fade" tabindex="-1" id="modalImg" aria-hidden="true">
+            <div class="modal-dialog" >
+                <div class="modal-content">
+                   <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <img class="mx-auto img-fluid" :src="'http://localhost:3000/' + item.file_path" alt="" style="">
+                    </div>
+                </div>
+            </div>
+        </div>
+                            </td>
+                          
+                            <td class="text-center">
+                              <button type="button" class="btn btn-success mr-2 " style="border-radius: 2.5em;">Success</button>
+                              <button type="button" class="btn btn-danger" style="border-radius: 2.5em;">Fail</button>
+                            </td>
                         </tr>
                         
                     </tbody>
                 </table>
+
+               
+
+
             </div>
+
+        
+
+      
 
 
 
       
       <!-- แก้ไขข้อมูลส่วนตัว -->
-      <div class="container" v-show="EditProfile == true">
+      <div class="container" v-if="editProfile == 'true'">
       <h3 class="text-center pb-4">แก้ไขข้อมูลส่วนตัว</h3>
       <form>
 
@@ -225,10 +259,11 @@
           </div>
         </div>
         <center><button type="submit" class="btn btn-danger" @click="submit()">บันทึก</button></center>
+        
       </form>
     </div>
 
-    <!-- คอนเสิร์ตของฉัน -->
+  
 
 
 
@@ -238,10 +273,14 @@
  
     </div>
   </div>
+
     </div>
+    
 </template>
 
 <script>
+
+import axios from "@/plugins/axios";
 import {
   required,
   minLength,
@@ -271,9 +310,11 @@ function complexPassword(value) {
 }
 
 export default {
+  
     props: ['user'],
     data() {
         return {
+            xxx: {},
             firstName: '',
             lastName: '',
             address: '',
@@ -281,14 +322,25 @@ export default {
             password: '',
             newPassword: '',
             confirmNewpassword: '',
-
             imageOfCus: '',
-        
-
-            EditProfile: false,
-            myConcert: false,
+            myConcert: 'false',
+            checkOrder: 'true',
+            editProfile: 'false',
+            concerts: {}, 
+            myOrders:{},
+            
         };
     },
+    mounted () {
+      this.getMycon(this.user.user_id)
+    // this.myConcert = localStorage.getItem("myConcert")
+    // this.checkOrder = localStorage.getItem("checkOrder")
+    // this.editProfile = localStorage.getItem("editProfile")
+    // localStorage.removeItem("myConcert")
+    // localStorage.removeItem("checkOrder")
+    // localStorage.removeItem("editProfile")
+     
+  },
     validations:{
     firstName:{
         required: required,
@@ -322,27 +374,58 @@ export default {
     
   },
   methods:{
+      getMycon(id){
+          axios
+        .get(`/mycon/${id}`)
+        .then((res) => {
+          this.concerts = res.data
+          this.getMyorder(this.user.user_id)
+
+        })
+        .catch((e) => {
+          console.log(e)
+        });
+      },
+      getMyorder(id){
+         axios
+        .get(`/checkOrder/${id}`)
+        .then((res) => {
+          this.myOrders = res.data
+        })
+        .catch((e) => {
+          console.log(e)
+        });
+      },
       showEditProfile(){
-          if(this.EditProfile){
-              this.EditProfile = false
+          if(this.editProfile == 'true'){
+              this.editProfile = 'false'
           }
           else{
-              this.EditProfile = true
-              this.myConcert = false
+              this.editProfile = 'true'
+              this.myConcert = 'false'
+              this.checkOrder = 'false'
           }
       },
       showMyConcert(){
-          if(this.myConcert){
-              this.myConcert = false
+          if(this.myConcert == 'true'){
+              this.myConcert = 'false'
           }
           else{
-              this.myConcert = true
-              this.EditProfile =false
+              this.myConcert = 'true'
+              this.editProfile ='false'
+              this.checkOrder = 'false'
           }
       },
-    //   showImage(){
-    //       this.imageOfCus = 
-    //   },
+      showCheckOrder(){
+         if(this.checkOrder == 'true'){
+              this.checkOrder = 'false'
+          }
+          else{
+              this.checkOrder = 'true'
+              this.editProfile ='false'
+              this.myConcert = 'false'
+          }
+      },
       logout(){
             localStorage.clear()
             location.reload();

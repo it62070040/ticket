@@ -43,7 +43,17 @@ const addbook = Joi.object({
   address_id: Joi.required(),
   ticType: Joi.string().required()
 })
-
+const concertOwner = async (req, res, next) => {
+  if (req.user.role === 'admin') {
+         return next()
+       }
+     const [[concert]] = await pool.query('SELECT * FROM concerts WHERE concert_id=?', [req.params.id])
+   
+     if (concert.user_user_id !== req.user.user_id) {
+       return res.status(403).send('You do not have permission to perform this action')
+     }
+     next()
+   }
 
 
 router.post("/concerts", upload.array("myImage", 5),async function (req, res, next) {
@@ -150,6 +160,26 @@ router.get("/location/:id", async function (req, res, next) {
   }  
 });
 
+router.get("/mycon/:id", async function (req, res, next) {
+  
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+  try {
+    let [rows,fields] = await conn.query("SELECT c.concert_id, c.concert_title, c.price, i.file_path, l.seat, sum(IFNULL(b.booking_amount,0)) `sold`, l.amount, c.concert_status FROM concerts c join images  i on (c.concert_id = i.concert_id) join location l on (c.address_id = l.address_id) left outer join booking b on (c.concert_id = b.concert_concert_id) group by c.concert_title, c.price, c.user_user_id, i.file_path, l.seat having c.user_user_id = ?", [req.params.id]);
+
+
+    await conn.commit();
+    res.json(rows);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
+
 router.get("/booked/:id", async function (req, res, next) {
   
   const conn = await pool.getConnection()
@@ -242,6 +272,105 @@ router.post("/addbooking", async function (req, res, next) {
     console.log("finally");
     conn.release();
   }  
+});
+
+router.delete('/image/:imageId', async function (req, res, next) {
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+
+  try {
+      // Get Path files from the upload folder
+      const [
+          images,
+          imageFields,
+      ] = await conn.query(
+          "SELECT `file_path` FROM `images` WHERE `id` = ?",
+          [req.params.imageId]
+      );
+
+      // Delete File from path
+      const appDir = path.dirname(require.main.filename); // Get app root directory
+      console.log(appDir)
+      const p = path.join(appDir, 'static', images[0].file_path);
+      fs.unlinkSync(p);
+
+      // Delete Data from Table images
+      const [rows1, fields1] = await conn.query(
+          'DELETE FROM `images` WHERE `id`=?', [req.params.imageId]
+      )
+
+      // commit
+      await conn.commit()
+      res.json({ message: "Delete image Complete" })
+  } catch (error) {
+      next(error)
+      await conn.rollback();
+      // res.status(500).json(error)
+  } finally {
+      conn.release();
+  }
+})
+
+router.put("/concerts/:id",upload.array("myImage", 5),  async function (req, res, next) {
+  const file = req.files;
+  let pathArray = []
+
+  if (!file) {
+    const error = new Error("Please upload a file");
+    error.httpStatusCode = 400;
+    next(error);
+  }
+
+  const concert_title = req.body.concert_title;
+  const concert_desc = req.body.concert_desc;
+  const concert_address = req.body.concert_address;
+  const address_id = req.body.address_id;
+  const price = req.body.price;
+  const concert_showtime = req.body.concert_showtime;
+  const buy_available = req.body.buy_available;
+  const user_user_id = req.body.user_user_id
+
+  const bank_account = req.body.bank_account;
+  const account_name = req.body.account_name;
+  const concert_id  = req.body.concert_id;
+  const fname = req.body.fname;
+  const lname = req.body.lname;
+
+
+  const conn = await pool.getConnection()
+  await conn.beginTransaction();
+
+  try {
+    let results = await conn.query(
+      "UPDATE concerts SET concert_title=?, concert_address=?, concert_desc=?, concert_showtime=?, buy_available=?, address_id=?, price=?, user_user_id=? WHERE concert_id=?",
+      [concert_title,concert_address,concert_desc,concert_showtime,buy_available,address_id,price,user_user_id, req.params.id]
+    )
+    await conn.query(
+      "UPDATE banking SET bank_account=?, account_name=?, concert_id=?, user_id=?, fname=?, lname=? WHERE concert_id=?",
+      [bank_account,account_name,concert_id,user_user_id,fname,lname, req.params.id]
+    )
+
+    if (file.length > 0) {
+      file.forEach((file, index) => {
+        let path = [req.params.id, file.path.substring(6), 1]
+        pathArray.push(path)
+      })
+
+      await conn.query(
+        "INSERT INTO images(concert_id, file_path, main) VALUES ?;",
+        [pathArray])
+    }
+
+    await conn.commit()
+    res.send("success!");
+  } catch (err) {
+    await conn.rollback();
+    next(err);
+  } finally {
+    console.log('finally')
+    conn.release();
+  }
+  return;
 });
 
 

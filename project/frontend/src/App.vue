@@ -79,9 +79,10 @@
           {{user.fname}} {{user.lname}}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" >คอนเสิร์ตของฉัน</a>
+          <a class="dropdown-item" @click="showMyConcert()">คอนเสิร์ตของฉัน</a>
+          <a class="dropdown-item" @click="showCheckOrder()">ตรวจสอบคำสั่งซื้อจากลูกค้า</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" >แก้ไขข้อมูลส่วนตัว</a>
+          <a class="dropdown-item" @click="showEditProfile()">แก้ไขข้อมูลส่วนตัว</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item"  @click="logout()">ออกจากระบบ</a>
         </div>
@@ -113,10 +114,10 @@ import store from "./vuex/store"; // import the store we just created
 export default {
   data() {
     return {
+      store,
       user: null,
     };
   },
-  store,
   mounted() {
     this.onAuthChange();
   },
@@ -141,6 +142,18 @@ export default {
     logout(){
       localStorage.clear()
       location.reload();
+    },
+    showMyConcert(){
+      location.href = `http://localhost:8080/myconcert/${this.user.user_id}`
+      localStorage.setItem("myConcert", true);
+    },
+    showCheckOrder(){
+      location.href = `http://localhost:8080/myconcert/${this.user.user_id}`
+      localStorage.setItem("checkOrder", true);
+    },
+    showEditProfile(){
+      location.href = `http://localhost:8080/myconcert/${this.user.user_id}`
+      localStorage.setItem("editProfile", true);
     }
   },
 };

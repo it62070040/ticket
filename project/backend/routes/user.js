@@ -2,14 +2,13 @@ const express = require("express");
 const path = require("path");
 const pool = require("../config");
 const fs = require("fs");
-
-
 router = express.Router();
 
 // user detail
 
 const multer = require("multer");
 // SET STORAGE
+
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, "./static/uploads");
@@ -88,5 +87,44 @@ router.post("/payment",upload.array("image", 5), async function (req, res, next)
     }
 }
 );
+
+router.get("/banking/:id", async function (req, res, next) {
+  
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+  try {
+    let [rows,fields] = await conn.query("SELECT * FROM banking WHERE concert_id = ?", [req.params.id]);
+
+    await conn.commit();
+    res.json(rows);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
+
+router.get("/checkOrder/:id", async function (req, res, next) {
+  
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+  try {
+    let [rows,fields] = await conn.query("select b.booking_concert, concat(p.fname,' ' ,p.lname) `name`, b.booking_price, p.pay_date, pi.file_path from booking b left outer join payments p on (b.booking_id = p.booking_id) join payimages pi on (p.id = pi.payment_id) join banking ba on (b.banking_banking_id = ba.banking_id) where ba.user_id = ?", [req.params.id]);
+
+
+    await conn.commit();
+    res.json(rows);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
   
 exports.router = router;
