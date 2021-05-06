@@ -2,11 +2,11 @@
   <div class="container-fluid p-3">
     <div class="row mt-3">
       <div
-        class="col-3 justify-content-center d-flex"
+        class="col-4 justify-content-center d-flex"
         style="border-color: gray;"
       >
         <div class="profile">
-          <div class="mb-3 pt-3 pb-2 text-center" style="background-color: #f4f4f4;">
+          <div class="mb-3 pt-3 pb-2 text-center" style="background-color: #f4f4f4;width: 13em;">
             <b >{{user.fname}} {{user.lname}}</b>
             <p >{{user.email}}</p>
           </div>
