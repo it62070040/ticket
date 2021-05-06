@@ -1,5 +1,5 @@
 <template>
-  <div class="col-9">
+  <div class="col-7">
     <div class="pl-3 pt-2" v-show="store.state.col1">
       <h3 class="text-center pb-4">ตั๋วของฉัน</h3>
       <!-- <div class="row"  > -->
@@ -67,25 +67,10 @@
             <td>{{ order.booking_id }}</td>
             <td>{{ order.concert_title }}</td>
             <td>
-              {{
-                new Date(order.concert_showtime).toLocaleDateString("th", {
-                  weekday: "short",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })
-              }}
+              {{ new Date(order.concert_showtime).toLocaleDateString("th", { weekday: "short", year: "numeric", month: "short", day: "numeric",}) }}
             </td>
             <td>
-              {{
-                new Date(order.concert_showtime)
-                  .toLocaleDateString("th", {
-                    hour: "numeric",
-                    minute: "numeric",
-                  })
-                  .slice(-5)
-              }}
-              น.
+              {{ new Date(order.concert_showtime) .toLocaleDateString("th", { hour: "numeric",  minute: "numeric", }).slice(-5) }} น.
             </td>
             <td>{{ order.booking_seat }}</td>
             <td>{{ order.booking_seat }}</td>
