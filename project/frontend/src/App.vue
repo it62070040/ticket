@@ -62,12 +62,12 @@
                 </span>
               </a>
             </li> -->
-            <li class="nav-item dropdown" v-if="user && user.user == 'cus'">
+            <li class="nav-item dropdown" v-if="user && user.user == 'cus'" style="cursor: pointer">
         <a class="nav-link dropdown-toggle"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{user.fname}} {{user.lname}}
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" >ตั๋วของฉัน</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+          <router-link  :to="`/user/${user.user_id}`"><a class="dropdown-item" >ตั๋วของฉัน</a></router-link>
           <a class="dropdown-item" >ประวัติการสั่งซื้อ</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" >แก้ไขข้อมูลส่วนตัว</a>
@@ -134,6 +134,7 @@ export default {
         .get("/user/me", { headers: { Authorization: "Bearer " + token } })
         .then((res) => {
           this.user = res.data;
+          console.log(res.data.user_id)
         })
         .catch((err) => {
           console.log(err);

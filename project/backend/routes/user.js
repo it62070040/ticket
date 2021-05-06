@@ -2,7 +2,37 @@ const express = require("express");
 const path = require("path");
 const pool = require("../config");
 const fs = require("fs");
+
+
 router = express.Router();
+
+const loginSchema = Joi.object({
+  emailLogin: Joi.string().required().email(),
+  passLogin: Joi.string().required()
+}) 
+
+function passwordValidator (value, helpers) {
+if(value.length < 8){
+ throw new Joi.ValidationError('Password must contain at least 8 charecters')
+}
+if (!(value.match(/[a-z]/) && value.match(/[A-Z]/) && value.match(/[0-9]/))) {
+ throw new Joi.ValidationError('Password must be harder')
+}
+return value
+}
+
+
+const singupschema = Joi.object({
+  mobile: Joi.string().required().pattern(/0[0-9]{9}/),
+  first_name: Joi.string().required().max(150),
+  last_name: Joi.string().required().max(150),
+  password: Joi.string().required().custom(passwordValidator),
+  confirmpassword: Joi.string().required().valid(Joi.ref('password')),
+  address: Joi.string().required().max(150),
+  id: Joi.number().required(),
+  oldpassword:  Joi.string().required()
+})
+
 
 // user detail
 
@@ -22,26 +52,93 @@ var storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.get("/users/:id", function (req, res, next) {
-    // Query data from 3 tables
-    const promise1 = pool.query("SELECT * FROM concert.users u join concert.booking b on (u.user_id = b.user_user_id) join concert.concerts c on (b.concert_concert_id = c.concert_id) join concert.images i on (c.concert_id = i.concert_id) WHERE u.user_id=?", [
-      req.params.id,
-    ]);
 
-  
-    // Use Promise.all() to make sure that all queries are successful
-    Promise.all([promise1])
-      .then((results) => {
-        const [users, blogFields] = results[0];
-        res.json({
-          user: users,
-          error: null,
-        });
-      })
-      .catch((err) => {
-        return res.status(500).json(err);
-      });
-  }),
+router.get("/user/:id",  async function (req, res, next) {
+
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+
+  try {
+    let [rows,fields] = await conn.query("SELECT * FROM concert.users  WHERE user_id=?", [req.params.id]);
+    // let [rows2,fields2] = await conn.query("SELECT * FROM concert.booking where user_user_id=?", [req.params.id]);
+    
+
+    await conn.commit();
+    res.json(rows[0]);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
+
+
+  // edit data user
+router.put("/edit", async function (req, res, next) {
+    try {
+      await singupschema.validateAsync(req.body, {abortEarly: false})
+  } catch (err) {
+    return res.status(400).message(error)
+  }
+      const conn = await pool.getConnection()
+      await conn.beginTransaction()
+    
+      const id = req.body.id
+      const first_name = req.body.first_name
+      const last_name = req.body.last_name
+      const mobile = req.body.mobile
+      const address = req.body.address
+      const password = await bcrypt.hash(req.body.password, 5)
+      const oldpassword = req.body.oldpassword
+
+
+    try{
+      const [users] = await conn.query(
+        'SELECT * FROM users WHERE user_id=?', [id] )
+      const user = users[0]
+        if (!(await bcrypt.compare(oldpassword, user.password))) {
+          throw new Error('Incorrect old password')
+      }
+      
+      await conn.query("UPDATE users SET fname = ?, lname = ?, address = ?, phone = ?, password = ? WHERE user_id = ?",
+        [ first_name, last_name, address, mobile, password, id]) 
+
+        res.status(201).send(first_name)
+        console.log("edit data!")
+        conn.commit()
+        
+        
+      }catch(error){
+        conn.rollback()
+        res.status(400).json(error.toString())
+      }finally{
+          conn.release()
+      }
+});
+
+router.get("/UserBooked/:id",  async function (req, res, next) {
+
+  const conn = await pool.getConnection()
+  await conn.beginTransaction()
+
+  try {
+    let [rows,fields] = await conn.query("SELECT * FROM concert.booking b join concert.concerts c on (c.concert_id= b.concert_concert_id) join concert.images i on (c.concert_id = i.concert_id) where b.user_user_id=?", [req.params.id]);
+    // let [rows2,fields2] = await conn.query("SELECT * FROM concert.booking where user_user_id=?", [req.params.id]);
+    
+
+    await conn.commit();
+    res.json(rows);
+  } catch (err) {
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    console.log("finally");
+    conn.release();
+  }  
+});
 
 router.post("/payment",upload.array("image", 5), async function (req, res, next) {
     const file = req.files;
