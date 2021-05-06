@@ -22,7 +22,6 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb  mb-0">
           <li class="breadcrumb-item"><a href="/">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">คอนเสิร์ต</a></li>
           <li class="breadcrumb-item active" aria-current="page">
             {{ concert.concert_title }}
           </li>
@@ -51,12 +50,12 @@
               <div class="box-txt" style="color: aliceblue;">
                 <div class="row">
                   <div class="col-12">
-                    <h3 class="title" style="color: aliceblue;">
+                    <h3 class="title pt-2" style="color: aliceblue;">
                       {{ concert.concert_title }}
                     </h3>
                   </div>
                 </div>
-                <div class="row row-detail">
+                <div class="row row-detail pt-2">
                   <div class="col-12 col-md">
                     <ul class="event-detail-list">
                       <li class="item">
@@ -71,7 +70,7 @@
                         ><small> สถานที่แสดง</small>
                         <p class="txt">
                           <span
-                            ><p>{{concert.address_name}}</p
+                            ><p>{{locationName}}</p
                             ></span
                           >
                         </p>
@@ -97,7 +96,7 @@
                         <i class="fas fa-dollar-sign"></i
                         ><small> ราคาบัตร</small>
                         <div class="txt">
-                          3,000 / 2,500 / 2,000 / 1,500 / 1,000 / 800
+                          {{concert.price}} บาท
                         </div>
                       </li>
                       <li class="item">
@@ -132,11 +131,11 @@
                                             </a>
                                         </div>
                                         <div class="box-txt">
-                                            <h2>{{concert.address_name}} </h2>
+                                            <h2>{{locationName}} </h2><br>
                                             <div>
-                                              <img :src="concert.image" style="height: 100px; object-fit: cover" />
-                                            </div>
-                                            <p><small class="txt-gray">ราคาบัตร</small><br>3,000 / 2,500 / 2,000 / 1,500 / 1,000 / 800 </p>
+                                              <img :src="imagesLo" style="height: 100px; object-fit: cover" />
+                                            </div><br>
+                                            <p><small class="txt-gray">ราคาบัตร</small><br>{{concert.price}} บาท</p>
 
                                         </div>
                                         <div class="box-event-list" style="background-color: #222;">
@@ -152,12 +151,13 @@
                                                         <div class="date">{{date}}</div>
                                                     </div>
                                                     <div class="col-btn col-6" style="text-align: -webkit-center;">
-                                                        <span class="btn-item">
+                                                        <router-link  :to="`/step1/${concert.concert_id}`">
+                                                        <span class="btn-item ">
                                                             <a id="but_buytic" class="btn btn-block ng-binding" onclick="" href="#">
-                                                            <span class="item-show">{{time}}</span>
+                                                            <span class="item-show">{{time}} น.</span>
                                                             <!-- <span class="item-hide">ซื้อบัตร</span> -->
                                                             </a>
-                                                        </span>
+                                                        </span></router-link>
                                                     </div>
                                                 </div>
                                             </div>
@@ -178,47 +178,72 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import axios from '@/plugins/axios';
 export default {
   data() {
     return {
       concert: {},
-      images: [],
+      location: [],
       error: null,
       date: "",
       buy: "",
       time: "",
+      locactionId: [],
+      images: [],
+      imagesLo: "",
+      locationName:  "",
     };
   },
   mounted() {
     this.getConcertDetail(this.$route.params.id);
+    
+    
   },
   methods: {
     getConcertDetail(concertID) {
       axios
         .get(`http://localhost:3000/concerts/${concertID}`)
         .then((response) => {
-          this.concert = response.data.concert;
+          this.concert = response.data.concert
           this.images = response.data.images;
-          this.date = String(response.data.concert.concert_showtime).substring(0,10);
-          this.time = String(response.data.concert.concert_showtime).substring(11,16);
-          this.buy = String(response.data.concert.buy_available).substring(0,10);
-
+          this.locationId = this.concert.address_id;
+          // console.log(this.concert)
+          this.date = new Date(this.concert.concert_showtime).toLocaleDateString("th", { weekday: "short", year: "numeric", month: "short", day: "numeric",}) 
+          this.time = new Date(this.concert.concert_showtime) .toLocaleDateString("th", { hour: "numeric",  minute: "numeric", }).slice(-5)
+          this.buy = new Date(this.concert.buy_available).toLocaleDateString("th", { weekday: "short", year: "numeric", month: "short", day: "numeric",})   
+          this.getLocation(this.locationId);
         })
         .catch((error) => {
           this.error = error.response.data.message;
         });
     },
+    getLocation(id){
+      axios
+        .get(`/location/${id}`)
+        .then((response) => {
+          this.location = response.data;
+
+          this.imagesLo = response.data.image
+          if(response.data.address_id == 1){
+            this.locationName = "โรงแรมคาร์ลตัน กรุงเทพฯ สุขุมวิท"
+          }
+          if(response.data.address_id == 2){
+            this.locationName = "ยูเนี่ยน ฮอลล์, ศูนย์การค้ายูเนี่ยน มอลล์"
+          }
+          if(response.data.address_id == 3){
+            this.locationName = "ศูนย์วัฒนธรรมแห่งประเทศไทย หอประชุมใหญ่"
+          }
+          console.log(this.locationName)
+        })
+        .catch((error) => {
+          this.error = error.response.data.message;
+        });
+    }
   },
 };
 </script>
 <style scoped>
-h4,h3 {
-    font-family: 'Prompt', sans-serif;
-    font-size: 16px;
-    font-weight: bolder;
-}
+
 p {
     font-family: 'Prompt', sans-serif;
     font-size: 14px;
@@ -260,6 +285,10 @@ p {
     letter-spacing: 1.1px;
     width: 100px;
     border-radius: 20px;
+}
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
 }
 
 </style>
