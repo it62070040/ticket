@@ -48,7 +48,7 @@
     <div class="pt-2" v-show="store.state.col2">
       <h3 class="text-center pb-3">ประวัติการสั่งซื้อ</h3>
       <table class="table table-hover">
-        <thead>
+        <thead class="thead-light">
           <tr class="text-center">
             <th>เลขคำสั่งซื้อ</th>
             <th>ชื่อคอนเสิร์ต</th>

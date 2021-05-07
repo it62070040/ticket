@@ -58,7 +58,7 @@ export default {
   methods: {
     getUser(userID){
       axios
-        .get(`http://localhost:3000/user/${userID}`)
+        .get(`/user/${userID}`)
         .then((response) => {
           this.user = response.data;
 
